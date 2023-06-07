@@ -1,0 +1,32 @@
+stages:
+  - build
+  - release
+  - deploy
+
+include:
+  - project: 'infrastructure/ci-scripts'
+    file: 'build-docker-image.yml'
+  - project: 'infrastructure/ci-scripts'
+    file: 'release-docker-image.yml'
+  - project: 'infrastructure/ci-scripts'
+    file: 'deploy-kustomize.yml'
+
+build:
+  extends: .build_image
+  only:
+    - main
+
+release:
+  extends: .release_image
+  only:
+    - main
+
+deploy:
+  extends: .deploy_kustomize
+  variables:
+    KUSTOMIZE_OVERLAY: k8s
+    KUBERNETES_NAMESPACE: default
+  only:
+    - main
+  environment:
+    name: prod
