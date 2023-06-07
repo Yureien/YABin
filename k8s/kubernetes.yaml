@@ -38,6 +38,8 @@ spec:
           envFrom:
             - secretRef:
                 name: yabin-config
+      imagePullSecrets:
+      - name: registry-sohamsen-me
       restartPolicy: Always
 ---
 apiVersion: networking.istio.io/v1alpha3
