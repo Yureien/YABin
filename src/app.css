@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --color-primary: #E5E1D1;
+    --color-background: #101419;
+    --color-dark: rgba(0, 0, 0, 0.4);
+}
+
 body {
 	@apply bg-background;
     @apply text-primary;

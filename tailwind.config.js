@@ -6,9 +6,9 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				primary: '#E5E1D1',
-				background: '#101419',
-				dark: 'rgba(0, 0, 0, 0.4)',
+				primary: 'var(--color-primary)',
+				background: 'var(--color-background)',
+				dark: 'var(--color-dark)',
 			},
 			fontFamily: {
 				sans: ['Fira Mono', ...defaultTheme.fontFamily.mono]
