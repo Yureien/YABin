@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import Select from 'svelte-select';
 	import { encrypt, encryptWithPassword } from '$lib/crypto';
+	import Hamburger from '$lib/components/Hamburger.svelte';
 
 	const initialConfig: PasteConfig = {
 		language: 'plaintext',
@@ -115,12 +116,7 @@
 
 	<button class="btn bg-amber-500 text-black text-lg px-4 py-1" on:click={save}>Save</button>
 
-	<button
-		class="btn bg-pink-500 text-black text-lg px-4 py-1"
-		on:click={() => (sidebarOpen = !sidebarOpen)}
-	>
-		H
-	</button>
+	<Hamburger bind:open={sidebarOpen} />
 </div>
 
 <div class="p-2 min-h-screen w-screen grid grid-cols-12 text-primary">
@@ -149,31 +145,33 @@
 		class:expanded={sidebarOpen}
 		id="sidebar"
 	>
-		<div class="flex flex-col items-center gap-4 ">
+		<div class="flex flex-col items-center gap-4">
 			<h1 class="text-4xl mb-5 max-sm:hidden"><a href="/">YABin</a></h1>
 
 			<button
-				class="btn bg-amber-500 text-black text-lg px-4 py-1 my-2 w-full max-sm:hidden"
+				class="btn bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
 				title="{cmdKey}+S"
 				on:click={save}
 			>
 				Save
 			</button>
 
-			<button
-				class="btn underline underline-offset-4 py-1"
-				title="{cmdKey}+N"
-				on:click={() => goto('/')}
-			>
-				New
-			</button>
-			<button
-				class="btn underline underline-offset-4 px-2 py-1"
-				title="{cmdKey}+N"
-				on:click={() => goto('/info')}
-			>
-				Info
-			</button>
+			<div class="flex flex-row gap-4 mb-4 justify-center">
+				<button
+					class="btn underline underline-offset-4 py-1"
+					title="{cmdKey}+N"
+					on:click={() => goto('/')}
+				>
+					New
+				</button>
+				<button
+					class="btn underline underline-offset-4 px-2 py-1"
+					title="{cmdKey}+N"
+					on:click={() => goto('/info')}
+				>
+					Info
+				</button>
+			</div>
 
 			<Select
 				class="px-1 py-1"
@@ -201,6 +199,9 @@
 				disabled={!config.encrypted}
 				bind:value={password}
 			/>
+			<small class="text-center text-xs hidden" class:hidden={config.encrypted}>
+				Need to enable encryption to use a password
+			</small>
 
 			<div>
 				<label for="burn" class="py-1">Burn after read?</label>
