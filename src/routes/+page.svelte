@@ -120,7 +120,7 @@
 			<input id="burn" type="checkbox" bind:checked={config.burnAfterRead} />
 		</div>
 
-		<div>
+		<!-- <div>
 			<label for="expires-after" class="py-1">Expires after</label>
 			<select id="expires-after" class="bg-dark px-1 py-1" bind:value={config.expiresAfter}>
 				<option selected value="never">Never</option>
@@ -130,7 +130,7 @@
 				<option value="1m">1 month</option>
 				<option value="1y">1 year</option>
 			</select>
-		</div>
+		</div> -->
 
 		<input type="text" class="bg-dark px-2 py-1" placeholder="Password" bind:value={password} />
 
