@@ -1,11 +1,9 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import prisma from '@db';
-import { page } from '$app/stores';
 import Prism from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
 import sanitize from 'sanitize-html';
-import sodium from 'libsodium-wrappers';
 
 /** @type {PageServerLoad} */
 export async function load({ params }) {
