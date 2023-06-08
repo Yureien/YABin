@@ -4,7 +4,6 @@
 	import type { Paste, PasteConfig, PasteCreateResponse } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Select from 'svelte-select';
-	import _sodium from 'libsodium-wrappers';
 
 	const initialConfig: PasteConfig = {
 		language: 'plaintext',
@@ -71,6 +70,7 @@
 		let urlParams = '';
 
 		if (config.encrypted) {
+			const _sodium = (await import('libsodium-wrappers')).default;
 			await _sodium.ready;
 			const sodium = _sodium;
 
