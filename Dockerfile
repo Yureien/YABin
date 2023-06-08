@@ -18,7 +18,8 @@ WORKDIR /app
 RUN npm install -g prisma pm2
 
 COPY scripts/ scripts/
-COPY package.json yarn.lock process.yml src/lib/server/prisma/schema.prisma ./
+COPY package.json yarn.lock process.yml ./
+COPY src/lib/server/prisma/ prisma/
 
 RUN yarn install --frozen-lockfile --production
 
