@@ -3,7 +3,6 @@ export interface PasteConfig {
 	encrypted: boolean;
 	expiresAfter: string;
 	burn: boolean;
-	password: string;
 }
 
 export interface Paste {

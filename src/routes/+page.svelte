@@ -4,25 +4,45 @@
 	import type { Paste, PasteConfig, PasteCreateResponse } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Select from 'svelte-select';
+	import _sodium from 'libsodium-wrappers';
+
+	const initialConfig: PasteConfig = {
+		language: 'plaintext',
+		encrypted: true,
+		expiresAfter: 'never',
+		burn: false
+	};
 
 	let inputRef: HTMLTextAreaElement;
 	let placeholderRef: HTMLDivElement;
 	let cmdKey = 'Ctrl';
-	let config: PasteConfig = {
-		language: 'plaintext',
-		encrypted: false,
-		expiresAfter: 'never',
-		burn: false,
-		password: ''
-	};
+	let content: string = '';
+	let password: string = '';
+	let config: PasteConfig = { ...initialConfig };
+
+	let _sessionStorage: Storage | undefined;
+
+	$: if (_sessionStorage) {
+		const pasteData: Paste = { content, config };
+		_sessionStorage.setItem('contentBackup', JSON.stringify(pasteData));
+	}
 
 	onMount(() => {
+		_sessionStorage = sessionStorage;
+		const contentBackup = _sessionStorage.getItem('contentBackup');
+		if (contentBackup) {
+			const data: Paste = JSON.parse(contentBackup);
+			content = data.content;
+			config = data.config;
+		}
+
 		inputRef.focus();
 		const isMac =
 			(navigator as any).userAgentData?.platform?.toLowerCase() === 'macos' ||
 			navigator.platform?.toLowerCase().startsWith('mac');
 		cmdKey = isMac ? '⌘' : 'Ctrl';
-		placeholderRef.classList.remove('hidden');
+
+		if (!content) placeholderRef.classList.remove('hidden');
 
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
@@ -32,7 +52,9 @@
 
 			if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
 				e.preventDefault();
-				inputRef.value = '';
+				content = '';
+				config = { ...initialConfig };
+				sessionStorage.removeItem('contentBackup');
 			}
 
 			if (e.key === 'i' && (e.ctrlKey || e.metaKey)) {
@@ -43,11 +65,27 @@
 	});
 
 	const save = async () => {
-		let content = inputRef.value;
 		if (!content) return;
 
+		let finalContent = content;
+		let urlParams = '';
+
+		if (config.encrypted) {
+			await _sodium.ready;
+			const sodium = _sodium;
+
+			const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
+			const key = sodium.crypto_secretbox_keygen();
+			const encrypted = sodium.crypto_secretbox_easy(content, nonce, key);
+
+			finalContent = sodium.to_base64(encrypted);
+
+			const nonceKey = sodium.to_base64(nonce) + ';' + sodium.to_base64(key);
+			urlParams = `k=${encodeURIComponent(nonceKey)}`;
+		}
+
 		const data: Paste = {
-			content,
+			content: finalContent,
 			config
 		};
 
@@ -61,7 +99,8 @@
 			});
 			const json: PasteCreateResponse = await response.json();
 			if (json.success) {
-				await goto(`/${json.data?.key}`);
+				_sessionStorage?.removeItem('contentBackup');
+				await goto(`/${json.data?.key}?${urlParams}`);
 			} else {
 				console.log(json);
 			}
@@ -92,12 +131,7 @@
 			</select>
 		</div>
 
-		<input
-			type="text"
-			class="bg-dark px-2 py-1"
-			placeholder="Password"
-			bind:value={config.password}
-		/>
+		<input type="text" class="bg-dark px-2 py-1" placeholder="Password" bind:value={password} />
 
 		<div>
 			<label for="encrypted" class="py-1">Encrypted?</label>
@@ -147,13 +181,15 @@
 	<textarea
 		class="px-2 grow border-none outline-none bg-transparent resize-none"
 		spellcheck="false"
+		bind:value={content}
 		bind:this={inputRef}
 		on:keyup={() => {
-			if (inputRef.value) {
-				placeholderRef.classList.add('hidden');
-			} else {
-				placeholderRef.classList.remove('hidden');
-			}
+			if (content) placeholderRef.classList.add('hidden');
+			else placeholderRef.classList.remove('hidden');
+		}}
+		on:paste={() => {
+			if (content) placeholderRef.classList.add('hidden');
+			else placeholderRef.classList.remove('hidden');
 		}}
 	/>
 	<div

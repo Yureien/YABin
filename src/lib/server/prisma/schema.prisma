@@ -16,6 +16,7 @@ model Paste {
   key          String    @unique
   authorIp     String
   content      String
+  encrypted    Boolean   @default(false)
   language     String    @default("plaintext")
   expiresAt    DateTime?
   expiresCount Int?

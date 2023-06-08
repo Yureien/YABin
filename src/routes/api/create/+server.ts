@@ -23,7 +23,8 @@ export async function POST({ request, getClientAddress }) {
 			key,
 			authorIp: getClientAddress(),
 			content,
-			language: config.language
+			language: config.language,
+			encrypted: config.encrypted
 		}
 	});
 
