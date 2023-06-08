@@ -99,7 +99,7 @@
 			<h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
 
 			<button
-				class="btn underline underline-offset-4 px-2 py-1"
+				class="underline underline-offset-4 px-2 py-1"
 				title="{cmdKey}+I"
 				on:click={() => goto('/info')}
 			>
@@ -107,7 +107,7 @@
 			</button>
 
 			<button
-				class="btn underline underline-offset-4 px-2 py-1"
+				class="underline underline-offset-4 px-2 py-1"
 				title="{cmdKey}+N"
 				on:click={() => goto('/')}
 			>
@@ -115,7 +115,7 @@
 			</button>
 
 			<button
-				class="btn bg-amber-500 text-black text-lg px-4 py-1"
+				class="bg-amber-500 text-black text-lg px-4 py-1"
 				title="{cmdKey}+Shift+C"
 				on:click={copyContent}
 			>
@@ -142,7 +142,7 @@
 				bind:value={password}
 			/>
 			<button
-				class="md:w-fit btn bg-amber-500 text-black text-lg px-4 py-1"
+				class="md:w-fit bg-amber-500 text-black text-lg px-4 py-1"
 				on:click={decryptPassword}
 			>
 				Decrypt

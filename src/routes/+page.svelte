@@ -114,7 +114,7 @@
 <div class="sm:hidden flex flex-row gap-2 items-center px-4 py-2">
 	<h1 class="text-4xl mr-auto"><a href="/">YABin</a></h1>
 
-	<button class="btn bg-amber-500 text-black text-lg px-4 py-1" on:click={save}>Save</button>
+	<button class="bg-amber-500 text-black text-lg px-4 py-1" on:click={save}>Save</button>
 
 	<Hamburger bind:open={sidebarOpen} />
 </div>
@@ -149,7 +149,7 @@
 			<h1 class="text-4xl mb-5 max-sm:hidden"><a href="/">YABin</a></h1>
 
 			<button
-				class="btn bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
+				class="bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
 				title="{cmdKey}+S"
 				on:click={save}
 			>
@@ -158,14 +158,14 @@
 
 			<div class="flex flex-row gap-4 mb-4 justify-center">
 				<button
-					class="btn underline underline-offset-4 py-1"
+					class="underline underline-offset-4 py-1"
 					title="{cmdKey}+N"
 					on:click={() => goto('/')}
 				>
 					New
 				</button>
 				<button
-					class="btn underline underline-offset-4 px-2 py-1"
+					class="underline underline-offset-4 px-2 py-1"
 					title="{cmdKey}+N"
 					on:click={() => goto('/info')}
 				>
@@ -207,6 +207,10 @@
 				<label for="burn" class="py-1">Burn after read?</label>
 				<input id="burn" type="checkbox" bind:checked={config.burnAfterRead} />
 			</div>
+
+			<a class="underline underline-offset-4 px-2 py-1" href="https://github.com/Yureien/YABin">
+				GitHub
+			</a>
 		</div>
 	</div>
 </div>
