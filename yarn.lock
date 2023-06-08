@@ -1653,6 +1653,11 @@ prettier@^2.8.0:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.8.tgz#e8c5d7e98a4305ffe3de2e1fc4aca1a71c28b1da"
   integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
+prism-themes@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/prism-themes/-/prism-themes-1.9.0.tgz#19c034f3205f1e28d75d89728e54ccd745f7e3dd"
+  integrity sha512-tX2AYsehKDw1EORwBps+WhBFKc2kxfoFpQAjxBndbZKr4fRmMkv47XN0BghC/K1qwodB1otbe4oF23vUTFDokw==
+
 prisma@^4.15.0:
   version "4.15.0"
   resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.15.0.tgz#4faa94f0d584828b68468953ff0bc88f37912c8c"
@@ -1913,6 +1918,11 @@ svelte-preprocess@^5.0.3:
     magic-string "^0.27.0"
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
+
+svelte-prism-autoloader@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/svelte-prism-autoloader/-/svelte-prism-autoloader-0.0.3.tgz#f524fdfe2424e255e0b6475cbee489ad6231d29f"
+  integrity sha512-hp0k3Rn39rCCjex4quQpSRX+JriSm3CyNkJjvMMFQ+NdzIENXMQA0NAX4IwyjeWdnvE3DbfGRUQlPMxlW76BEA==
 
 svelte-select@^5.6.1:
   version "5.6.1"

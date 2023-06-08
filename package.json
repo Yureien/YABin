@@ -40,7 +40,9 @@
 	"dependencies": {
 		"@prisma/client": "^4.15.0",
 		"libsodium-wrappers": "^0.7.11",
+		"prism-themes": "^1.9.0",
 		"prismjs": "^1.29.0",
-		"sanitize-html": "^2.10.0"
+		"sanitize-html": "^2.10.0",
+		"svelte-prism-autoloader": "^0.0.3"
 	}
 }
