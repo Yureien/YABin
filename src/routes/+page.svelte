@@ -113,7 +113,7 @@
 
 <div class="pb-4">
 	<div class="flex flex-row items-center gap-4">
-		<h1 class="mr-auto text-2xl"><a href="/">YAbin</a></h1>
+		<h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
 
 		<div>
 			<label for="burn" class="py-1">Burn after read?</label>

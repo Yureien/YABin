@@ -92,7 +92,7 @@
 
 <div class="pb-4">
 	<div class="flex flex-row items-center gap-4">
-		<h1 class="mr-auto text-2xl"><a href="/">YAbin</a></h1>
+		<h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
 
 		<button
 			class="btn underline underline-offset-4 px-2 py-1"
