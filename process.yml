@@ -1,6 +1,6 @@
 apps:
   - name: 'app'
     script: './build/index.js'
-    instances: 'max'
+    instances: '1'
     env:
       NODE_ENV: 'production'
