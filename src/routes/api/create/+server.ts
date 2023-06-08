@@ -4,7 +4,7 @@ import prisma from '@db';
 
 /** @type {RequestHandler} */
 export async function POST({ request, getClientAddress }) {
-	const data: Paste = await request.json();
+	const { content, config }: Paste = await request.json();
 
 	let attempts = 0;
 	let keyLength = 5;
@@ -22,7 +22,8 @@ export async function POST({ request, getClientAddress }) {
 		data: {
 			key,
 			authorIp: getClientAddress(),
-			content: data.content
+			content,
+			language: config.language
 		}
 	});
 

@@ -1,5 +1,5 @@
 export interface PasteConfig {
-	type: string;
+	language: string;
 	encrypted: boolean;
 	expiresAfter: string;
 	burn: boolean;

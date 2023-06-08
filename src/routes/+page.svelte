@@ -9,7 +9,7 @@
 	let placeholderRef: HTMLDivElement;
 	let cmdKey = 'Ctrl';
 	let config: PasteConfig = {
-		type: 'plaintext',
+		language: 'plaintext',
 		encrypted: false,
 		expiresAfter: 'never',
 		burn: false,
@@ -44,6 +44,8 @@
 
 	const save = async () => {
 		let content = inputRef.value;
+		if (!content) return;
+
 		const data: Paste = {
 			content,
 			config
@@ -105,7 +107,8 @@
 		<Select
 			class="px-1 py-1"
 			items={Array.from(languageKeysByName, ([label, value]) => ({ label, value }))}
-			bind:value={config.type}
+			value={config.language}
+			bind:justValue={config.language}
 			showChevron
 			clearable={false}
 			--background="var(--color-dark)"
