@@ -21,7 +21,6 @@ export async function POST({ request, getClientAddress }) {
 	await prisma.paste.create({
 		data: {
 			key,
-			authorIp: getClientAddress(),
 			content,
 			language: config.language,
 			encrypted: config.encrypted

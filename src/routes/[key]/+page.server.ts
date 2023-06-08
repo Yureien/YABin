@@ -15,6 +15,11 @@ export async function load({ params }) {
 
 	if (!data) throw error(404, 'Not found');
 
+	await prisma.paste.update({
+		where: { key },
+		data: { readCount: { increment: 1 } }
+	});
+
 	let { content, language, encrypted } = data;
 
 	let contentHtml: string;
