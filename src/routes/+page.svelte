@@ -4,6 +4,7 @@
 	import type { Paste, PasteConfig, PasteCreateResponse } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Select from 'svelte-select';
+	import { encrypt, encryptWithPassword } from '$lib/crypto';
 
 	const initialConfig: PasteConfig = {
 		language: 'plaintext',
@@ -22,7 +23,7 @@
 	let _sessionStorage: Storage | undefined;
 
 	$: if (_sessionStorage) {
-		const pasteData: Paste = { content, config };
+		const pasteData: { content: string; config: PasteConfig } = { content, config };
 		_sessionStorage.setItem('contentBackup', JSON.stringify(pasteData));
 	}
 
@@ -30,7 +31,7 @@
 		_sessionStorage = sessionStorage;
 		const contentBackup = _sessionStorage.getItem('contentBackup');
 		if (contentBackup) {
-			const data: Paste = JSON.parse(contentBackup);
+			const data: { content: string; config: PasteConfig } = JSON.parse(contentBackup);
 			content = data.content;
 			config = data.config;
 		}
@@ -68,25 +69,25 @@
 
 		let finalContent = content;
 		let urlParams = '';
+		let passwordProtected = false;
 
 		if (config.encrypted) {
-			const _sodium = (await import('libsodium-wrappers')).default;
-			await _sodium.ready;
-			const sodium = _sodium;
-
-			const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES);
-			const key = sodium.crypto_secretbox_keygen();
-			const encrypted = sodium.crypto_secretbox_easy(content, nonce, key);
-
-			finalContent = sodium.to_base64(encrypted);
-
-			const nonceKey = sodium.to_base64(nonce) + ';' + sodium.to_base64(key);
-			urlParams = `k=${encodeURIComponent(nonceKey)}`;
+			if (password) {
+				passwordProtected = true;
+				const [encryptedContent, key] = await encryptWithPassword(content, password);
+				finalContent = encryptedContent;
+				urlParams = `k=${encodeURIComponent(key)}`;
+			} else {
+				const [encryptedContent, key] = await encrypt(content);
+				finalContent = encryptedContent;
+				urlParams = `k=${encodeURIComponent(key)}`;
+			}
 		}
 
 		const data: Paste = {
 			content: finalContent,
-			config
+			config,
+			passwordProtected
 		};
 
 		try {

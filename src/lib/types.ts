@@ -8,6 +8,7 @@ export interface PasteConfig {
 export interface Paste {
 	content: string;
 	config: PasteConfig;
+	passwordProtected: boolean;
 }
 
 export interface PasteCreateResponse {

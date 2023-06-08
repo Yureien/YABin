@@ -20,7 +20,7 @@ export async function load({ params }) {
 		data: { readCount: { increment: 1 } }
 	});
 
-	let { content, language, encrypted } = data;
+	let { content, language, encrypted, passwordProtected } = data;
 
 	let contentHtml: string;
 
@@ -40,6 +40,7 @@ export async function load({ params }) {
 		content,
 		contentHtml,
 		encrypted,
-		language
+		language,
+		passwordProtected
 	};
 }

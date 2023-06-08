@@ -11,13 +11,14 @@ datasource db {
 }
 
 model Paste {
-  id           BigInt    @id @default(autoincrement())
-  createdAt    DateTime  @default(now())
-  key          String    @unique
-  content      String
-  encrypted    Boolean   @default(false)
-  language     String    @default("plaintext")
-  expiresAt    DateTime?
-  expiresCount Int?
-  readCount    Int       @default(0)
+  id                BigInt    @id @default(autoincrement())
+  createdAt         DateTime  @default(now())
+  key               String    @unique
+  content           String
+  encrypted         Boolean   @default(false)
+  passwordProtected Boolean   @default(false)
+  language          String    @default("plaintext")
+  expiresAt         DateTime?
+  expiresCount      Int?
+  readCount         Int       @default(0)
 }

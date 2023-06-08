@@ -8,10 +8,12 @@
 	let Prism: any;
 
 	export let data: PageData;
-	let { content, contentHtml, language, encrypted } = data;
-	let isSafe = true;
+	let { content, contentHtml, language, encrypted, passwordProtected } = data;
+	let password = '';
 	let isDecrypted = false;
 	let codeRef: HTMLElement;
+	let pwInputRef: HTMLInputElement;
+	let error: string;
 
 	$: if (isDecrypted && codeRef) {
 		(async () => {
@@ -26,6 +28,8 @@
 			(navigator as any).userAgentData?.platform?.toLowerCase() === 'macos' ||
 			navigator.platform?.toLowerCase().startsWith('mac');
 		cmdKey = isMac ? '⌘' : 'Ctrl';
+
+		pwInputRef?.focus();
 
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
@@ -42,38 +46,44 @@
 				e.preventDefault();
 				copyContent();
 			}
+
+			if (encrypted && passwordProtected && !isDecrypted && e.key === 'Enter') {
+				e.preventDefault();
+				decryptPassword();
+			}
 		});
 
-		if (encrypted) {
+		if (encrypted && !passwordProtected) {
 			contentHtml = 'Decrypting...';
 			(async () => {
-				const _sodium = (await import('libsodium-wrappers')).default;
-
 				try {
-					await _sodium.ready;
-					const sodium = _sodium;
+					const ivKey = $page.url.searchParams.get('k');
+					if (!ivKey) throw new Error('Missing key');
 
-					const nonceKeyB64 = $page.url.searchParams.get('k');
-					if (!nonceKeyB64) throw new Error('Missing key');
-					const [nonceB64, keyB64] = decodeURIComponent(nonceKeyB64).split(';');
-					const nonce = sodium.from_base64(nonceB64);
-					const key = sodium.from_base64(keyB64);
-					const decrypted = sodium.crypto_secretbox_open_easy(
-						sodium.from_base64(content),
-						nonce,
-						key
-					);
-					content = sodium.to_string(decrypted);
-
-					isSafe = false;
-					isDecrypted = true;
+					const { decrypt } = await import('$lib/crypto');
+					content = await decrypt(content, ivKey);
 				} catch (e) {
-					console.error(e);
-					contentHtml = 'Failed to decrypt';
+					error = 'Failed to decrypt';
+				} finally {
+					isDecrypted = true;
 				}
 			})();
 		}
 	});
+
+	async function decryptPassword() {
+		try {
+			const ivKey = $page.url.searchParams.get('k');
+			if (!ivKey) throw new Error('Missing key');
+
+			const { decryptWithPassword } = await import('$lib/crypto');
+			content = await decryptWithPassword(content, ivKey, password);
+		} catch (e) {
+			error = 'Failed to decrypt';
+		} finally {
+			isDecrypted = true;
+		}
+	}
 
 	function copyContent() {
 		navigator.clipboard.writeText(content);
@@ -110,14 +120,36 @@
 	</div>
 </div>
 
-<div class="whitespace-pre bg-dark p-4 overflow-x-scroll">
-	{#if isSafe}
+{#if !encrypted}
+	<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
 		{@html contentHtml}
-	{:else}
+	</div>
+{:else if error}
+	<div class="md:mt-10 text-center text-lg">
+		{error}
+	</div>
+{:else if passwordProtected && !isDecrypted}
+	<div class="flex flex-col items-center gap-4 md:mt-10">
+		<input
+			class="md:w-1/3 text-lg px-4 py-1 bg-dark text-white"
+			type="text"
+			placeholder="Enter password..."
+			bind:this={pwInputRef}
+			bind:value={password}
+		/>
+		<button
+			class="md:w-fit btn bg-amber-500 text-black text-lg px-4 py-1"
+			on:click={decryptPassword}
+		>
+			Decrypt
+		</button>
+	</div>
+{:else}
+	<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
 		<pre><code bind:this={codeRef} class="language-{language}">{content}</code></pre>
 		<AutoLoader languagesPath="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/" />
-	{/if}
-</div>
+	</div>
+{/if}
 
 <svelte:head>
 	<link
