@@ -10,7 +10,7 @@
 		language: 'plaintext',
 		encrypted: true,
 		expiresAfter: 'never',
-		burn: false
+		burnAfterRead: false
 	};
 
 	let inputRef: HTMLTextAreaElement;
@@ -117,7 +117,7 @@
 
 		<div>
 			<label for="burn" class="py-1">Burn after read?</label>
-			<input id="burn" type="checkbox" bind:checked={config.burn} />
+			<input id="burn" type="checkbox" bind:checked={config.burnAfterRead} />
 		</div>
 
 		<div>

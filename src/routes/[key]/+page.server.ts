@@ -9,18 +9,22 @@ import sanitize from 'sanitize-html';
 export async function load({ params }) {
 	const { key } = params;
 
-	const data = await prisma.paste.findUnique({
+	let data = await prisma.paste.findUnique({
 		where: { key }
 	});
 
 	if (!data) throw error(404, 'Not found');
 
-	await prisma.paste.update({
+	data = await prisma.paste.update({
 		where: { key },
 		data: { readCount: { increment: 1 } }
 	});
 
-	let { content, language, encrypted, passwordProtected } = data;
+	let { content, language, encrypted, passwordProtected, expiresCount, readCount } = data;
+	if (expiresCount !== null && expiresCount < readCount) {
+		await prisma.paste.delete({ where: { key } });
+		throw error(404, 'Not found');
+	}
 
 	let contentHtml: string;
 

@@ -41,7 +41,6 @@
 		"base64-js": "^1.5.1",
 		"prism-themes": "^1.9.0",
 		"prismjs": "^1.29.0",
-		"sanitize-html": "^2.10.0",
-		"svelte-prism-autoloader": "^0.0.3"
+		"sanitize-html": "^2.10.0"
 	}
 }

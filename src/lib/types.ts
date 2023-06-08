@@ -2,7 +2,7 @@ export interface PasteConfig {
 	language: string;
 	encrypted: boolean;
 	expiresAfter: string;
-	burn: boolean;
+	burnAfterRead: boolean;
 }
 
 export interface Paste {

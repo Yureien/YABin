@@ -24,7 +24,8 @@ export async function POST({ request }) {
 			content,
 			language: config.language,
 			encrypted: config.encrypted,
-			passwordProtected
+			passwordProtected,
+			expiresCount: config.burnAfterRead ? 1 : null
 		}
 	});
 

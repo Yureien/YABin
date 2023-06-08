@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { AutoLoader } from 'svelte-prism-autoloader';
 	import type { PageData } from './$types';
 
 	let Prism: any;
@@ -15,10 +14,14 @@
 	let pwInputRef: HTMLInputElement;
 	let error: string;
 
-	$: if (isDecrypted && codeRef) {
+	$: if (isDecrypted && codeRef && language && language !== 'plaintext') {
 		(async () => {
 			const Prism = (await import('prismjs')).default;
-			Prism.highlightElement(codeRef);
+			const script = document.createElement('script');
+			script.async = true;
+			script.src = `https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-${language}.min.js`;
+			script.onload = () => Prism.highlightAll();
+			document.body.appendChild(script);
 		})();
 	}
 
@@ -147,7 +150,6 @@
 {:else}
 	<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
 		<pre><code bind:this={codeRef} class="language-{language}">{content}</code></pre>
-		<AutoLoader languagesPath="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/" />
 	</div>
 {/if}
 

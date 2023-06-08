@@ -1907,11 +1907,6 @@ svelte-preprocess@^5.0.3:
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
 
-svelte-prism-autoloader@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/svelte-prism-autoloader/-/svelte-prism-autoloader-0.0.3.tgz#f524fdfe2424e255e0b6475cbee489ad6231d29f"
-  integrity sha512-hp0k3Rn39rCCjex4quQpSRX+JriSm3CyNkJjvMMFQ+NdzIENXMQA0NAX4IwyjeWdnvE3DbfGRUQlPMxlW76BEA==
-
 svelte-select@^5.6.1:
   version "5.6.1"
   resolved "https://registry.yarnpkg.com/svelte-select/-/svelte-select-5.6.1.tgz#2626748c92ff3983c75f273d87afba59ffef3b29"
