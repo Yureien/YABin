@@ -17,7 +17,7 @@ export async function load({ params }) {
 
 	let { content, language } = data;
 
-	let contentHtml;
+	let contentHtml: string;
 
 	try {
 		if (language !== 'plaintext') {
