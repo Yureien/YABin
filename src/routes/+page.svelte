@@ -19,6 +19,7 @@
 	let content: string = '';
 	let password: string = '';
 	let config: PasteConfig = { ...initialConfig };
+	let sidebarOpen = false;
 
 	let _sessionStorage: Storage | undefined;
 
@@ -41,8 +42,6 @@
 			(navigator as any).userAgentData?.platform?.toLowerCase() === 'macos' ||
 			navigator.platform?.toLowerCase().startsWith('mac');
 		cmdKey = isMac ? '⌘' : 'Ctrl';
-
-		if (!content) placeholderRef.classList.remove('hidden');
 
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
@@ -111,97 +110,113 @@
 	};
 </script>
 
-<div class="pb-4">
-	<div class="flex flex-row items-center gap-4">
-		<h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
+<div class="sm:hidden flex flex-row gap-2 items-center px-4 py-2">
+	<h1 class="text-4xl mr-auto"><a href="/">YABin</a></h1>
 
-		<div>
-			<label for="burn" class="py-1">Burn after read?</label>
-			<input id="burn" type="checkbox" bind:checked={config.burnAfterRead} />
-		</div>
+	<button class="btn bg-amber-500 text-black text-lg px-4 py-1" on:click={save}>Save</button>
 
-		<!-- <div>
-			<label for="expires-after" class="py-1">Expires after</label>
-			<select id="expires-after" class="bg-dark px-1 py-1" bind:value={config.expiresAfter}>
-				<option selected value="never">Never</option>
-				<option value="1h">1 hour</option>
-				<option value="1d">1 day</option>
-				<option value="1w">1 week</option>
-				<option value="1m">1 month</option>
-				<option value="1y">1 year</option>
-			</select>
-		</div> -->
-
-		<input type="text" class="bg-dark px-2 py-1" placeholder="Password" bind:value={password} />
-
-		<div>
-			<label for="encrypted" class="py-1">Encrypted?</label>
-			<input id="encrypted" type="checkbox" bind:checked={config.encrypted} />
-		</div>
-
-		<Select
-			class="px-1 py-1"
-			items={Array.from(languageKeysByName, ([label, value]) => ({ label, value }))}
-			value={config.language}
-			bind:justValue={config.language}
-			showChevron
-			clearable={false}
-			--background="var(--color-dark)"
-			--list-background="var(--color-dark)"
-			--item-hover-bg="rgb(245, 158, 11)"
-			--item-hover-color="#000"
-			--border="0"
-			--width="200px"
-		/>
-
-		<button
-			class="btn underline underline-offset-4 py-1"
-			title="{cmdKey}+N"
-			on:click={() => goto('/')}
-		>
-			New
-		</button>
-		<button
-			class="btn underline underline-offset-4 px-2 py-1"
-			title="{cmdKey}+N"
-			on:click={() => goto('/info')}
-		>
-			Info
-		</button>
-		<button
-			class="btn bg-amber-500 text-black text-lg px-4 py-1"
-			title="{cmdKey}+S"
-			on:click={save}
-		>
-			Save
-		</button>
-	</div>
-</div>
-
-<div class="grow flex flex-col relative">
-	<textarea
-		class="px-2 grow border-none outline-none bg-transparent resize-none"
-		spellcheck="false"
-		bind:value={content}
-		bind:this={inputRef}
-		on:keyup={() => {
-			if (content) placeholderRef.classList.add('hidden');
-			else placeholderRef.classList.remove('hidden');
-		}}
-		on:paste={() => {
-			if (content) placeholderRef.classList.add('hidden');
-			else placeholderRef.classList.remove('hidden');
-		}}
-	/>
-	<div
-		class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg -z-10 opacity-40 hidden"
-		bind:this={placeholderRef}
+	<button
+		class="btn bg-pink-500 text-black text-lg px-4 py-1"
+		on:click={() => (sidebarOpen = !sidebarOpen)}
 	>
-		Type or paste anything here, and then {cmdKey}+S to save.
-		<br /><br />
-		Visit Info page to get the APIs and more.
-		<br /><br />
-		You can support this project and get a custom subdomain and custom styles (and text!) by going to
-		the Info page.
+		H
+	</button>
+</div>
+
+<div class="p-2 min-h-screen w-screen grid grid-cols-12 text-primary">
+	<div class="col-span-12 sm:col-span-10 flex flex-col relative">
+		<textarea
+			class="px-2 grow border-none outline-none bg-transparent resize-none"
+			spellcheck="false"
+			bind:value={content}
+			bind:this={inputRef}
+		/>
+		<div
+			class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg -z-10 opacity-40 hidden"
+			class:hidden={content}
+			bind:this={placeholderRef}
+		>
+			Type or paste anything here, and then {cmdKey}+S to save.
+			<br /><br />
+			Visit Info page to get the APIs and more.
+			<br /><br />
+			You can support this project and get a custom subdomain and custom styles (and text!) by going
+			to the Info page.
+		</div>
+	</div>
+	<div
+		class="sm:col-span-2 md:mt-4 px-2 max-sm:fixed max-sm:bg-black max-sm:bg-opacity-50 max-sm:backdrop-blur max-sm:h-full max-sm:w-full"
+		class:expanded={sidebarOpen}
+		id="sidebar"
+	>
+		<div class="flex flex-col items-center gap-4 ">
+			<h1 class="text-4xl mb-5 max-sm:hidden"><a href="/">YABin</a></h1>
+
+			<button
+				class="btn bg-amber-500 text-black text-lg px-4 py-1 my-2 w-full max-sm:hidden"
+				title="{cmdKey}+S"
+				on:click={save}
+			>
+				Save
+			</button>
+
+			<button
+				class="btn underline underline-offset-4 py-1"
+				title="{cmdKey}+N"
+				on:click={() => goto('/')}
+			>
+				New
+			</button>
+			<button
+				class="btn underline underline-offset-4 px-2 py-1"
+				title="{cmdKey}+N"
+				on:click={() => goto('/info')}
+			>
+				Info
+			</button>
+
+			<Select
+				class="px-1 py-1"
+				items={Array.from(languageKeysByName, ([label, value]) => ({ label, value }))}
+				value={config.language}
+				bind:justValue={config.language}
+				showChevron
+				clearable={false}
+				--background="var(--color-dark)"
+				--list-background="#000"
+				--item-hover-bg="rgb(245, 158, 11)"
+				--item-hover-color="#000"
+				--border="0"
+			/>
+
+			<div>
+				<label for="encrypted" class="py-1">Encrypted?</label>
+				<input id="encrypted" type="checkbox" bind:checked={config.encrypted} />
+			</div>
+
+			<input
+				type="text"
+				class="bg-dark px-2 py-1 w-full"
+				placeholder="Password"
+				disabled={!config.encrypted}
+				bind:value={password}
+			/>
+
+			<div>
+				<label for="burn" class="py-1">Burn after read?</label>
+				<input id="burn" type="checkbox" bind:checked={config.burnAfterRead} />
+			</div>
+		</div>
 	</div>
 </div>
+
+<style lang="postcss">
+	#sidebar {
+		right: -100%;
+		transition: right 0.3s ease-out;
+
+		&.expanded {
+			right: 0;
+		}
+	}
+</style>

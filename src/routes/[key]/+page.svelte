@@ -93,65 +93,67 @@
 	}
 </script>
 
-<div class="pb-4">
-	<div class="flex flex-row items-center gap-4">
-		<h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
+<div class="p-2 min-h-screen w-screen flex flex-col text-primary">
+	<div class="pb-4">
+		<div class="flex flex-row items-center gap-4">
+			<h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
 
-		<button
-			class="btn underline underline-offset-4 px-2 py-1"
-			title="{cmdKey}+I"
-			on:click={() => goto('/info')}
-		>
-			Info
-		</button>
+			<button
+				class="btn underline underline-offset-4 px-2 py-1"
+				title="{cmdKey}+I"
+				on:click={() => goto('/info')}
+			>
+				Info
+			</button>
 
-		<button
-			class="btn underline underline-offset-4 px-2 py-1"
-			title="{cmdKey}+N"
-			on:click={() => goto('/')}
-		>
-			New
-		</button>
+			<button
+				class="btn underline underline-offset-4 px-2 py-1"
+				title="{cmdKey}+N"
+				on:click={() => goto('/')}
+			>
+				New
+			</button>
 
-		<button
-			class="btn bg-amber-500 text-black text-lg px-4 py-1"
-			title="{cmdKey}+Shift+C"
-			on:click={copyContent}
-		>
-			Copy
-		</button>
+			<button
+				class="btn bg-amber-500 text-black text-lg px-4 py-1"
+				title="{cmdKey}+Shift+C"
+				on:click={copyContent}
+			>
+				Copy
+			</button>
+		</div>
 	</div>
+
+	{#if !encrypted}
+		<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
+			{@html contentHtml}
+		</div>
+	{:else if error}
+		<div class="md:mt-10 text-center text-lg">
+			{error}
+		</div>
+	{:else if passwordProtected && !isDecrypted}
+		<div class="flex flex-col items-center gap-4 md:mt-10">
+			<input
+				class="md:w-1/3 text-lg px-4 py-1 bg-dark text-white"
+				type="text"
+				placeholder="Enter password..."
+				bind:this={pwInputRef}
+				bind:value={password}
+			/>
+			<button
+				class="md:w-fit btn bg-amber-500 text-black text-lg px-4 py-1"
+				on:click={decryptPassword}
+			>
+				Decrypt
+			</button>
+		</div>
+	{:else}
+		<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
+			<pre><code bind:this={codeRef} class="language-{language}">{content}</code></pre>
+		</div>
+	{/if}
 </div>
-
-{#if !encrypted}
-	<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
-		{@html contentHtml}
-	</div>
-{:else if error}
-	<div class="md:mt-10 text-center text-lg">
-		{error}
-	</div>
-{:else if passwordProtected && !isDecrypted}
-	<div class="flex flex-col items-center gap-4 md:mt-10">
-		<input
-			class="md:w-1/3 text-lg px-4 py-1 bg-dark text-white"
-			type="text"
-			placeholder="Enter password..."
-			bind:this={pwInputRef}
-			bind:value={password}
-		/>
-		<button
-			class="md:w-fit btn bg-amber-500 text-black text-lg px-4 py-1"
-			on:click={decryptPassword}
-		>
-			Decrypt
-		</button>
-	</div>
-{:else}
-	<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
-		<pre><code bind:this={codeRef} class="language-{language}">{content}</code></pre>
-	</div>
-{/if}
 
 <svelte:head>
 	<link
