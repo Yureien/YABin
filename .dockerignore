@@ -16,3 +16,4 @@ build
 package
 **/.env
 .env.example
+k8s
