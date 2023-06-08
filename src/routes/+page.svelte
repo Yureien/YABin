@@ -209,7 +209,7 @@
 			</div>
 
 			<a class="underline underline-offset-4 px-2 py-1" href="https://github.com/Yureien/YABin">
-				GitHub
+				Source Code
 			</a>
 		</div>
 	</div>
