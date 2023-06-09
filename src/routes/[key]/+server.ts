@@ -19,28 +19,23 @@ export async function GET({ url, params }) {
 		return text('An error occurred', { status: 500 });
 	}
 
-	const { encrypted, passwordProtected } = data;
+	const { encrypted, passwordProtected, initVector } = data;
 	let { content } = data;
 	const searchParams = url.searchParams;
-	const ivStr = searchParams.get('i');
 	const keyStr = searchParams.get('k');
 	const password = searchParams.get('p');
 
-	if (encrypted && ivStr && keyStr && !passwordProtected) {
+	if (encrypted && initVector && keyStr && !passwordProtected) {
 		try {
-			content = await decrypt(content, decodeURIComponent(ivStr), decodeURIComponent(keyStr));
+			content = await decrypt(content, initVector, decodeURIComponent(keyStr));
 		} catch (e) {
 			return text('Failed to decrypt', { status: 403 });
 		}
 	}
 
-	if (encrypted && ivStr && passwordProtected && password) {
+	if (encrypted && initVector && passwordProtected && password) {
 		try {
-			content = await decryptWithPassword(
-				content,
-				decodeURIComponent(ivStr),
-				decodeURIComponent(password)
-			);
+			content = await decryptWithPassword(content, initVector, decodeURIComponent(password));
 		} catch (e) {
 			return text('Failed to decrypt', { status: 403 });
 		}

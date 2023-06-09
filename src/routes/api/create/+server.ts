@@ -3,7 +3,7 @@ import type { Paste, PasteCreateResponse } from '$lib/types';
 import prisma from '@db';
 
 export async function POST({ request }) {
-	const { content, config, passwordProtected }: Paste = await request.json();
+	const { content, config, passwordProtected, initVector }: Paste = await request.json();
 
 	let attempts = 0;
 	let keyLength = 5;
@@ -24,7 +24,8 @@ export async function POST({ request }) {
 			language: config.language,
 			encrypted: config.encrypted,
 			passwordProtected,
-			expiresCount: config.burnAfterRead ? 1 : null
+			expiresCount: config.burnAfterRead ? 1 : null,
+			initVector
 		}
 	});
 

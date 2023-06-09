@@ -9,6 +9,7 @@ export interface Paste {
 	content: string;
 	config: PasteConfig;
 	passwordProtected: boolean;
+	initVector?: string;
 }
 
 export interface PasteCreateResponse {

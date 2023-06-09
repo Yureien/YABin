@@ -7,7 +7,7 @@ export async function load({ params }) {
 	const { key } = params;
 
 	const data = await getPaste(key);
-	let { content, language, encrypted, passwordProtected, expiresCount, readCount } = data;
+	let { content, language, encrypted, passwordProtected, initVector } = data;
 
 	let contentHtml: string;
 
@@ -28,6 +28,7 @@ export async function load({ params }) {
 		contentHtml,
 		encrypted,
 		language,
-		passwordProtected
+		passwordProtected,
+		initVector
 	};
 }

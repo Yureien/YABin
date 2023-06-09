@@ -13,12 +13,15 @@ datasource db {
 model Paste {
   id                BigInt    @id @default(autoincrement())
   createdAt         DateTime  @default(now())
-  key               String    @unique
+  key               String    @unique @db.VarChar(20)
   content           String
   encrypted         Boolean   @default(false)
   passwordProtected Boolean   @default(false)
-  language          String    @default("plaintext")
+  initVector        String?   @unique @db.VarChar(64)
+  language          String    @default("plaintext") @db.VarChar(64)
   expiresAt         DateTime?
   expiresCount      Int?
   readCount         Int       @default(0)
+
+  @@index([key])
 }

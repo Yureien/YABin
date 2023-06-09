@@ -75,24 +75,27 @@
 		let finalContent = content;
 		let urlParams = '';
 		let passwordProtected = false;
+		let initVector: string | undefined;
 
 		if (config.encrypted) {
 			if (password) {
 				passwordProtected = true;
 				const { ciphertext, iv } = await encryptWithPassword(content, password);
 				finalContent = ciphertext;
-				urlParams = `i=${encodeURIComponent(iv)}`;
+				initVector = iv;
 			} else {
 				const { ciphertext, iv, key } = await encrypt(content);
 				finalContent = ciphertext;
-				urlParams = `i=${encodeURIComponent(iv)}#${encodeURIComponent(key)}`;
+				initVector = iv;
+				urlParams = `#${encodeURIComponent(key)}`;
 			}
 		}
 
 		const data: Paste = {
 			content: finalContent,
 			config,
-			passwordProtected
+			passwordProtected,
+			initVector
 		};
 
 		try {
@@ -106,7 +109,7 @@
 			const json: PasteCreateResponse = await response.json();
 			if (json.success) {
 				_sessionStorage?.removeItem('contentBackup');
-				await goto(`/${json.data?.key}?${urlParams}`);
+				await goto(`/${json.data?.key}${urlParams}`);
 			} else {
 				console.log(json);
 			}
@@ -162,11 +165,7 @@
 			</button>
 
 			<div class="flex flex-row gap-4 mb-4 justify-center">
-				<button
-					class="underline underline-offset-4 py-1"
-					title="{cmdKey}+N"
-					on:click={newPaste}
-				>
+				<button class="underline underline-offset-4 py-1" title="{cmdKey}+N" on:click={newPaste}>
 					New
 				</button>
 				<button

@@ -66,7 +66,8 @@
 				</li>
 				<li>
 					<b>Optional</b> end-to-end encryption (we're using AES-256-GCM) with optional password protection
-					(using PBKDF2).
+					(using PBKDF2-SHA512). The initialization vector is stored on the server, since it can be public
+					and it results in a shorter URL while having the same end-to-end security.
 				</li>
 				<li>
 					Syntax highlighting (using <a

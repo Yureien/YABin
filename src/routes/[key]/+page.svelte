@@ -7,7 +7,7 @@
 	let Prism: any;
 
 	export let data: PageData;
-	let { content, contentHtml, language, encrypted, passwordProtected } = data;
+	let { content, contentHtml, language, encrypted, passwordProtected, initVector } = data;
 	let password = '';
 	let isDecrypted = false;
 	let codeRef: HTMLElement;
@@ -60,13 +60,11 @@
 			contentHtml = 'Decrypting...';
 			(async () => {
 				try {
-					const ivStr = $page.url.searchParams.get('i');
 					const keyStr = $page.url.hash.slice(1);
-					console.log(keyStr);
-					if (!ivStr || !keyStr) throw new Error('Missing key');
+					if (!initVector || !keyStr) throw new Error('Missing key');
 
 					const { decrypt } = await import('$lib/crypto');
-					content = await decrypt(content, decodeURIComponent(ivStr), decodeURIComponent(keyStr));
+					content = await decrypt(content, initVector, decodeURIComponent(keyStr));
 				} catch (e) {
 					error = 'Failed to decrypt';
 				} finally {
@@ -78,11 +76,10 @@
 
 	async function decryptPassword() {
 		try {
-			const ivStr = $page.url.searchParams.get('i');
-			if (!ivStr) throw new Error('Missing key');
+			if (!initVector) throw new Error('Missing key');
 
 			const { decryptWithPassword } = await import('$lib/crypto');
-			content = await decryptWithPassword(content, ivStr, password);
+			content = await decryptWithPassword(content, initVector, password);
 		} catch (e) {
 			error = 'Failed to decrypt';
 		} finally {
@@ -97,13 +94,11 @@
 	function openRaw() {
 		const url = new URL($page.url.toString());
 		url.searchParams.set('r', '');
-		if (
-			!confirm(
-				"WARNING: Getting the raw will decrypt the content on the server. It's not recommended to get the raw if the content is encrypted. Continue?"
-			)
-		)
-			return;
+		const confirmMsg =
+			"WARNING: Getting the raw will decrypt the content on the server. It's not recommended to get the raw if the content is encrypted. Continue?";
+
 		if (encrypted && !passwordProtected) {
+			if (!confirm(confirmMsg)) return;
 			url.searchParams.set('k', decodeURIComponent(url.hash.slice(1)));
 			url.hash = '';
 		}

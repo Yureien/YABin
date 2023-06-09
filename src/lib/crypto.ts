@@ -47,9 +47,9 @@ export async function encryptWithPassword(plaintext: string, password: string) {
 	const key = await crypto.subtle.deriveKey(
 		{
 			name: 'PBKDF2',
-			salt: await crypto.subtle.digest('SHA-256', encoder.encode(password)),
-			iterations: 100000,
-			hash: 'SHA-256'
+			salt: await crypto.subtle.digest('SHA-512', encoder.encode(password)),
+			iterations: 310000,
+			hash: 'SHA-512'
 		},
 		keyMaterial,
 		alg,
@@ -79,9 +79,9 @@ export async function decryptWithPassword(ciphertext: string, iv: string, passwo
 	const key = await crypto.subtle.deriveKey(
 		{
 			name: 'PBKDF2',
-			salt: await crypto.subtle.digest('SHA-256', encoder.encode(password)),
-			iterations: 100000,
-			hash: 'SHA-256'
+			salt: await crypto.subtle.digest('SHA-512', encoder.encode(password)),
+			iterations: 310000,
+			hash: 'SHA-512'
 		},
 		keyMaterial,
 		alg,
