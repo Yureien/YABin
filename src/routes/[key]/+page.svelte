@@ -64,7 +64,7 @@
 					if (!ivKey) throw new Error('Missing key');
 
 					const { decrypt } = await import('$lib/crypto');
-					content = await decrypt(content, ivKey);
+					content = await decrypt(content, decodeURIComponent(ivKey));
 				} catch (e) {
 					error = 'Failed to decrypt';
 				} finally {
@@ -91,6 +91,11 @@
 	function copyContent() {
 		navigator.clipboard.writeText(content);
 	}
+
+	function openRaw() {
+		$page.url.searchParams.set('r', '');
+		window.open($page.url.toString(), '_self');
+	}
 </script>
 
 <div class="p-2 min-h-screen w-screen flex flex-col text-primary">
@@ -115,8 +120,16 @@
 			</button>
 
 			<button
+				class="underline underline-offset-4 px-2 py-1"
+				title={encrypted ? 'Warning: If you get the raw, it will decrypt on the server' : ''}
+				on:click={openRaw}
+			>
+				Raw
+			</button>
+
+			<button
 				class="bg-amber-500 text-black text-lg px-4 py-1"
-				title="{cmdKey}+Shift+C"
+				title="{cmdKey}+C"
 				on:click={copyContent}
 			>
 				Copy
@@ -141,10 +154,7 @@
 				bind:this={pwInputRef}
 				bind:value={password}
 			/>
-			<button
-				class="md:w-fit bg-amber-500 text-black text-lg px-4 py-1"
-				on:click={decryptPassword}
-			>
+			<button class="md:w-fit bg-amber-500 text-black text-lg px-4 py-1" on:click={decryptPassword}>
 				Decrypt
 			</button>
 		</div>

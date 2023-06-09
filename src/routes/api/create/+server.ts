@@ -1,8 +1,7 @@
-import { error, json } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import type { Paste, PasteCreateResponse } from '$lib/types';
 import prisma from '@db';
 
-/** @type {RequestHandler} */
 export async function POST({ request }) {
 	const { content, config, passwordProtected }: Paste = await request.json();
 
