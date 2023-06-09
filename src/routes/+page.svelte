@@ -51,10 +51,7 @@
 			}
 
 			if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
-				e.preventDefault();
-				content = '';
-				config = { ...initialConfig };
-				sessionStorage.removeItem('contentBackup');
+				newPaste(e);
 			}
 
 			if (e.key === 'i' && (e.ctrlKey || e.metaKey)) {
@@ -63,6 +60,14 @@
 			}
 		});
 	});
+
+	const newPaste = (e: any) => {
+		e?.preventDefault();
+		content = '';
+		password = '';
+		config = { ...initialConfig };
+		sessionStorage.removeItem('contentBackup');
+	};
 
 	const save = async () => {
 		if (!content) return;
@@ -160,7 +165,7 @@
 				<button
 					class="underline underline-offset-4 py-1"
 					title="{cmdKey}+N"
-					on:click={() => goto('/')}
+					on:click={newPaste}
 				>
 					New
 				</button>
