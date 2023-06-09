@@ -1,7 +1,7 @@
 # YABin: Yet Another Pastebin
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A21C34E)
-![GitHub Sponsor](https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub) ![https://git.sohamsen.me/GhostDev/yabin/badges/main/pipeline.svg](https://github.com/Yureien/YABin)
+![GitHub Sponsor](https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub) ![Pipeline Status](https://git.sohamsen.me/GhostDev/yabin/badges/main/pipeline.svg)
 
 **WARNING: Still under development. There WILL be breaking changes.**
 
