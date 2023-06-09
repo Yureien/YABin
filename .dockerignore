@@ -17,3 +17,4 @@ package
 **/.env
 .env.example
 k8s
+.github
