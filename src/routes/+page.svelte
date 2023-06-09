@@ -74,13 +74,13 @@
 		if (config.encrypted) {
 			if (password) {
 				passwordProtected = true;
-				const [encryptedContent, key] = await encryptWithPassword(content, password);
-				finalContent = encryptedContent;
-				urlParams = `k=${encodeURIComponent(key)}`;
+				const { ciphertext, iv } = await encryptWithPassword(content, password);
+				finalContent = ciphertext;
+				urlParams = `i=${encodeURIComponent(iv)}`;
 			} else {
-				const [encryptedContent, key] = await encrypt(content);
-				finalContent = encryptedContent;
-				urlParams = `k=${encodeURIComponent(key)}`;
+				const { ciphertext, iv, key } = await encrypt(content);
+				finalContent = ciphertext;
+				urlParams = `i=${encodeURIComponent(iv)}#${encodeURIComponent(key)}`;
 			}
 		}
 

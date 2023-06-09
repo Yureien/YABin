@@ -60,11 +60,13 @@
 			contentHtml = 'Decrypting...';
 			(async () => {
 				try {
-					const ivKey = $page.url.searchParams.get('k');
-					if (!ivKey) throw new Error('Missing key');
+					const ivStr = $page.url.searchParams.get('i');
+					const keyStr = $page.url.hash.slice(1);
+					console.log(keyStr);
+					if (!ivStr || !keyStr) throw new Error('Missing key');
 
 					const { decrypt } = await import('$lib/crypto');
-					content = await decrypt(content, decodeURIComponent(ivKey));
+					content = await decrypt(content, decodeURIComponent(ivStr), decodeURIComponent(keyStr));
 				} catch (e) {
 					error = 'Failed to decrypt';
 				} finally {
@@ -76,11 +78,11 @@
 
 	async function decryptPassword() {
 		try {
-			const ivKey = $page.url.searchParams.get('k');
-			if (!ivKey) throw new Error('Missing key');
+			const ivStr = $page.url.searchParams.get('i');
+			if (!ivStr) throw new Error('Missing key');
 
 			const { decryptWithPassword } = await import('$lib/crypto');
-			content = await decryptWithPassword(content, ivKey, password);
+			content = await decryptWithPassword(content, ivStr, password);
 		} catch (e) {
 			error = 'Failed to decrypt';
 		} finally {
@@ -93,8 +95,20 @@
 	}
 
 	function openRaw() {
-		$page.url.searchParams.set('r', '');
-		window.open($page.url.toString(), '_self');
+		const url = new URL($page.url.toString());
+		url.searchParams.set('r', '');
+		if (
+			!confirm(
+				"WARNING: Getting the raw will decrypt the content on the server. It's not recommended to get the raw if the content is encrypted. Continue?"
+			)
+		)
+			return;
+		if (encrypted && !passwordProtected) {
+			url.searchParams.set('k', decodeURIComponent(url.hash.slice(1)));
+			url.hash = '';
+		}
+		if (passwordProtected) url.searchParams.set('p', password);
+		window.open(url.toString(), '_self');
 	}
 </script>
 

@@ -65,8 +65,8 @@
 					>).
 				</li>
 				<li>
-					<b>Optional</b> encryption (we're using AES-256-GCM) with optional password protection (using
-					PBKDF2).
+					<b>Optional</b> end-to-end encryption (we're using AES-256-GCM) with optional password protection
+					(using PBKDF2).
 				</li>
 				<li>
 					Syntax highlighting (using <a

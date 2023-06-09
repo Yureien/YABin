@@ -22,20 +22,25 @@ export async function GET({ url, params }) {
 	const { encrypted, passwordProtected } = data;
 	let { content } = data;
 	const searchParams = url.searchParams;
-	const ivKey = searchParams.get('k');
+	const ivStr = searchParams.get('i');
+	const keyStr = searchParams.get('k');
 	const password = searchParams.get('p');
 
-	if (encrypted && ivKey && !passwordProtected) {
+	if (encrypted && ivStr && keyStr && !passwordProtected) {
 		try {
-			content = await decrypt(content, ivKey);
+			content = await decrypt(content, decodeURIComponent(ivStr), decodeURIComponent(keyStr));
 		} catch (e) {
 			return text('Failed to decrypt', { status: 403 });
 		}
 	}
 
-	if (encrypted && ivKey && passwordProtected && password) {
+	if (encrypted && ivStr && passwordProtected && password) {
 		try {
-			content = await decryptWithPassword(content, ivKey, decodeURIComponent(password));
+			content = await decryptWithPassword(
+				content,
+				decodeURIComponent(ivStr),
+				decodeURIComponent(password)
+			);
 		} catch (e) {
 			return text('Failed to decrypt', { status: 403 });
 		}

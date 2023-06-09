@@ -13,13 +13,12 @@ export async function encrypt(plaintext: string) {
 	const enc = await crypto.subtle.encrypt(alg, key, encoder.encode(plaintext));
 	const encStr = base64.fromByteArray(new Uint8Array(enc));
 
-	return [encStr, `${ivStr};${keyStr}`];
+	return { ciphertext: encStr, iv: ivStr, key: keyStr };
 }
 
-export async function decrypt(ciphertext: string, ivKey: string) {
+export async function decrypt(ciphertext: string, ivStr: string, keyStr: string) {
 	const decoder = new TextDecoder('utf-8');
 
-	const [ivStr, keyStr] = ivKey.split(';');
 	const iv = base64.toByteArray(ivStr);
 	const alg = { name: 'AES-GCM', iv, length: 256 };
 
@@ -60,7 +59,7 @@ export async function encryptWithPassword(plaintext: string, password: string) {
 	const enc = await crypto.subtle.encrypt(alg, key, encoder.encode(plaintext));
 	const encStr = base64.fromByteArray(new Uint8Array(enc));
 
-	return [encStr, ivStr];
+	return { ciphertext: encStr, iv: ivStr };
 }
 
 export async function decryptWithPassword(ciphertext: string, iv: string, password: string) {
