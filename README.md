@@ -1,38 +1,36 @@
-# create-svelte
+# YABin: Yet Another Pastebin
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A21C34E)
+![GitHub Sponsor](https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub) ![https://git.sohamsen.me/GhostDev/yabin/badges/main/pipeline.svg](https://github.com/Yureien/YABin)
 
-## Creating a project
+**WARNING: Still under development. There WILL be breaking changes.**
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Why (yet) another pastebin?
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Well, cause no pastebin I could find had ALL of the following features:
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+ - Modern and minimal UI (This site's design was inspired by bin).
+ - Optional end-to-end encryption (we're using AES-256-GCM) with optional password protection (using PBKDF2).
+ - Syntax highlighting (using Prism) that supports 297 languages.
+ - API support to create and get pastes from command line.
+ - View raw pastes. Normally, encrypted pastebins do not have this. With this site, you can either get the Base64-encoded encrypted paste, or decrypt it on the server side (even with the password) and get the raw paste.
+ - Keyboard shortcuts!
+ - And ofcourse, being fully open-source and easily self-hostable.
 
-## Developing
+## How to use
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+#### Locally
 
 ```bash
-npm run build
+yarn install
+cp .env.example .env
+# Modify .env to add the database URL and other parameters
+yarn dev
 ```
 
-You can preview the production build with `npm run preview`.
+#### Using Docker
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```bash
+docker build -t yabin:latest .
+docker run --env-file .env -it -p 3000:3000 yabin:latest
+```
