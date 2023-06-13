@@ -3,8 +3,6 @@
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A21C34E)
 ![GitHub Sponsor](https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub)
 
-**WARNING: Still under development. There WILL be breaking changes.**
-
 ## Why (yet) another pastebin?
 
 Well, cause no pastebin I could find had ALL of the following features:
