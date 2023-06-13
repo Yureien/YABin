@@ -10,9 +10,54 @@
 	const initialConfig: PasteConfig = {
 		language: 'plaintext',
 		encrypted: true,
-		expiresAfter: 'never',
+		expiresAfter: 5,
 		burnAfterRead: false
 	};
+
+	let expiresAfter: {
+		days?: number;
+		hours?: number;
+		minutes?: number;
+	} = {};
+
+	$: {
+		if (expiresAfter.days) {
+			expiresAfter.days = Math.max(0, Math.round(expiresAfter.days));
+		}
+		if (expiresAfter.hours) {
+			expiresAfter.hours = Math.max(0, Math.round(expiresAfter.hours));
+			if (expiresAfter.hours > 23) {
+				expiresAfter.days ??= 0;
+				expiresAfter.days += Math.floor(expiresAfter.hours / 24);
+				expiresAfter.hours = expiresAfter.hours % 24;
+			}
+		}
+		if (expiresAfter.minutes) {
+			expiresAfter.minutes = Math.max(0, Math.round(expiresAfter.minutes));
+			if (expiresAfter.minutes > 59) {
+				expiresAfter.days ??= 0;
+				expiresAfter.hours ??= 0;
+				expiresAfter.days += Math.floor(expiresAfter.minutes / 1440);
+				expiresAfter.hours += Math.floor((expiresAfter.minutes % 1440) / 60);
+				expiresAfter.minutes = expiresAfter.minutes % 60;
+			}
+
+			if (
+				!expiresAfter.days &&
+				!expiresAfter.hours &&
+				expiresAfter.minutes > 0 &&
+				expiresAfter.minutes < 5
+			) {
+				expiresAfter.minutes = 5;
+			}
+		}
+
+		config.expiresAfter =
+			((expiresAfter.days ?? 0) * 1440 +
+				(expiresAfter.hours ?? 0) * 60 +
+				(expiresAfter.minutes ?? 0)) *
+			60;
+	}
 
 	let inputRef: HTMLTextAreaElement;
 	let placeholderRef: HTMLDivElement;
@@ -210,6 +255,30 @@
 			<div>
 				<label for="burn" class="py-1">Burn after read?</label>
 				<input id="burn" type="checkbox" bind:checked={config.burnAfterRead} />
+			</div>
+
+			<div class="w-full">
+				<span>Expires in:</span>
+				<div class="grid grid-cols-3 gap-2 justify-center items-center">
+					<input
+						type="number"
+						class="bg-dark py-1 text-center"
+						placeholder="DD"
+						bind:value={expiresAfter.days}
+					/>
+					<input
+						type="number"
+						class="bg-dark py-1 text-center"
+						placeholder="HH"
+						bind:value={expiresAfter.hours}
+					/>
+					<input
+						type="number"
+						class="bg-dark py-1 text-center"
+						placeholder="MM"
+						bind:value={expiresAfter.minutes}
+					/>
+				</div>
 			</div>
 
 			<a class="underline underline-offset-4 px-2 py-1" href="https://github.com/Yureien/YABin">

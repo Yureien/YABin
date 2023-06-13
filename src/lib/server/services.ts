@@ -13,11 +13,21 @@ export async function getPaste(key: string) {
 		data: { readCount: { increment: 1 } }
 	});
 
-	let { expiresCount, readCount } = data;
+	const { expiresCount, readCount } = data;
 	if (expiresCount !== null && expiresCount < readCount) {
 		await prisma.paste.delete({ where: { key } });
 		throw error(404, 'Not found');
 	}
 
 	return data;
+}
+
+export async function deleteExpiredPastes() {
+	await prisma.paste.deleteMany({
+		where: {
+			expiresAt: {
+				lt: new Date()
+			}
+		}
+	});
 }

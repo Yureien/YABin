@@ -25,7 +25,8 @@ export async function POST({ request }) {
 			encrypted: config.encrypted,
 			passwordProtected,
 			expiresCount: config.burnAfterRead ? 1 : null,
-			initVector
+			initVector,
+			expiresAt: config.expiresAfter ? new Date(Date.now() + config.expiresAfter * 1000) : null,
 		}
 	});
 

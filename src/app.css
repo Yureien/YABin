@@ -3,12 +3,19 @@
 @tailwind utilities;
 
 :root {
-    --color-primary: #E5E1D1;
-    --color-background: #101419;
-    --color-dark: rgba(0, 0, 0, 0.4);
+	--color-primary: #e5e1d1;
+	--color-background: #101419;
+	--color-dark: rgba(0, 0, 0, 0.7);
 }
 
 body {
 	@apply bg-background;
-    @apply text-primary;
+	@apply text-primary;
+}
+
+@layer utilities {
+	input[type='number']::-webkit-inner-spin-button,
+	input[type='number']::-webkit-outer-spin-button {
+		@apply appearance-none;
+	}
 }

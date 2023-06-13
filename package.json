@@ -15,6 +15,7 @@
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-node": "^1.2.4",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/node-cron": "^3.0.7",
 		"@types/prismjs": "^1.26.0",
 		"@types/sanitize-html": "^2.9.0",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -39,6 +40,7 @@
 	"dependencies": {
 		"@prisma/client": "^4.15.0",
 		"base64-js": "^1.5.1",
+		"node-cron": "^3.0.2",
 		"prism-themes": "^1.9.0",
 		"prismjs": "^1.29.0",
 		"sanitize-html": "^2.10.0"
