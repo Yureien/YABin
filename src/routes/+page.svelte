@@ -144,7 +144,7 @@
 		};
 
 		try {
-			const response = await fetch('/api/create', {
+			const response = await fetch('/api/paste', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

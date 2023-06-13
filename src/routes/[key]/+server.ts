@@ -1,12 +1,14 @@
-import type { Paste } from '@prisma/client';
-import { HttpError, text } from '@sveltejs/kit';
+import { HttpError, text, type RequestHandler } from '@sveltejs/kit';
 import { getPaste } from '$lib/server/services';
 import { decrypt, decryptWithPassword } from '$lib/crypto';
 
-export async function GET({ url, params }) {
+export const GET: RequestHandler = async ({ url, params }) => {
 	const { key } = params;
+	if (!key) {
+		return text('No key provided', { status: 400 });
+	}
 
-	let data: Paste | undefined;
+	let data;
 
 	try {
 		data = await getPaste(key);
@@ -17,6 +19,10 @@ export async function GET({ url, params }) {
 		}
 		console.error(e);
 		return text('An error occurred', { status: 500 });
+	}
+
+	if (!data) {
+		return text('Paste not found', { status: 404 });
 	}
 
 	const { encrypted, passwordProtected, initVector } = data;
@@ -42,4 +48,4 @@ export async function GET({ url, params }) {
 	}
 
 	return text(content);
-}
+};

@@ -3,7 +3,16 @@ import prisma from '@db';
 
 export async function getPaste(key: string) {
 	let data = await prisma.paste.findUnique({
-		where: { key }
+		where: { key },
+		select: {
+			content: true,
+			encrypted: true,
+			passwordProtected: true,
+			initVector: true,
+			language: true,
+			expiresCount: true,
+			readCount: true
+		}
 	});
 
 	if (!data) throw error(404, 'Not found');
@@ -19,7 +28,9 @@ export async function getPaste(key: string) {
 		throw error(404, 'Not found');
 	}
 
-	return data;
+	const { content, encrypted, passwordProtected, initVector, language } = data;
+
+	return { key, content, encrypted, passwordProtected, initVector, language };
 }
 
 export async function deleteExpiredPastes() {
