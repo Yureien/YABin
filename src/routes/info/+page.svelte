@@ -88,17 +88,25 @@
 						href="https://github.com/Yureien/YABin">open-source</a
 					> and easily self-hostable.
 				</li>
+				<li>It can even be run in serverless environments!</li>
 			</ul>
+
+			<p class="mt-4">
+				The API documentation is available <a
+					class="underline underline-offset-2"
+					href="https://github.com/Yureien/YABin/blob/main/API.md">here</a
+				>.
+			</p>
 		</div>
 
 		<div class="mt-8">
 			<h1 class="text-4xl">Support the development</h1>
-			<p class="text-lg mt-2">
+			<p class="mt-2">
 				If you really like this project, I'd love it if you <a
 					href="https://ko-fi.com/A0A21C34E"
 					target="_blank"
 					><img
-						class="border-0 inline h-10"
+						class="border-0 inline h-8"
 						src="https://storage.ko-fi.com/cdn/kofi3.png?v=3"
 						alt="Buy Me a Coffee at ko-fi.com"
 					/></a
@@ -107,13 +115,16 @@
 				<iframe
 					src="https://github.com/sponsors/Yureien/button"
 					title="Sponsor Yureien"
-					class="border-0 rounded h-10 inline w-32"
+					class="border-0 rounded h-8 inline w-28"
 				/> me on GitHub.
 			</p>
-			<p class="text-lg mt-4">
-				Soon, after the development is mostly complete, I will be running managed servers on a
-				custom and short domain. You can also support me by subscribing to a monthly service, and
-				you get your own pastebin, with your custom styles, colours, text and more!
+			<p class="text mt-4">
+				Soon, I will be running managed servers on a custom and short domain. You can support me by
+				subscribing to a monthly service, and you get your own pastebin, with your custom styles,
+				colours, text and more! If you are interested, please send me an email at <a
+					class="underline underline-offset-2"
+					href="mailto:contact@sohamsen.me">contact@sohamsen.me</a
+				>, and I will get back to you as soon as possible.
 			</p>
 		</div>
 	</div>

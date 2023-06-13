@@ -53,12 +53,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		data: {
 			key,
 			content,
-			language: config.language,
-			encrypted: config.encrypted,
+			language: config?.language ?? 'plaintext',
+			encrypted: config?.encrypted ?? false,
 			passwordProtected,
-			expiresCount: config.burnAfterRead ? 2 : null,
+			expiresCount: config?.burnAfterRead ? 2 : null,
 			initVector,
-			expiresAt: config.expiresAfter ? new Date(Date.now() + config.expiresAfter * 1000) : null
+			expiresAt: config?.expiresAfter ? new Date(Date.now() + config.expiresAfter * 1000) : null
 		}
 	});
 

@@ -1,14 +1,14 @@
 export interface PasteConfig {
-	language: string;
-	encrypted: boolean;
-	expiresAfter: number;
-	burnAfterRead: boolean;
+	language?: string;
+	encrypted?: boolean;
+	expiresAfter?: number;
+	burnAfterRead?: boolean;
 }
 
 export interface Paste {
 	content: string;
-	config: PasteConfig;
-	passwordProtected: boolean;
+	config?: PasteConfig;
+	passwordProtected?: boolean;
 	initVector?: string;
 }
 

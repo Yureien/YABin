@@ -15,7 +15,12 @@ Well, cause no pastebin I could find had ALL of the following features:
  - API support to create and get pastes from command line.
  - View raw pastes. Normally, encrypted pastebins do not have this. With this site, you can either get the Base64-encoded encrypted paste, or decrypt it on the server side (even with the password) and get the raw paste.
  - Keyboard shortcuts!
- - And ofcourse, being fully open-source and easily self-hostable.
+ - And of course, being fully open-source and easily self-hostable.
+ - **It can even be run on edge servers and in serverless environments!**
+
+ ## API Documentation
+
+See [API.md](API.md).
 
 ## How to use
 
@@ -34,3 +39,9 @@ yarn dev
 docker build -t yabin:latest .
 docker run --env-file .env -it -p 3000:3000 yabin:latest
 ```
+
+#### In a serverless environment (Cloudflare Workers, Netlify, Vercel, etc.)
+
+I have not yet tested this, but this is made with SvelteKit. Please take a look at the [SvelteKit documentation](https://kit.svelte.dev/docs/adapters) for more information. If there are any issues, please open an issue, and I will put up a proper guide on how to deploy on such environmments.
+
+**Right now, it is using PostgreSQL (cause I had a server lying around). However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)**
