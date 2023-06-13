@@ -34,8 +34,7 @@ yarn dev
 #### Using Docker
 
 ```bash
-docker build -t yabin:latest .
-docker run --env-file .env -it -p 3000:3000 yabin:latest
+docker run --env-file .env -it -p 3000:3000 yureien/yabin:latest
 ```
 
 #### In a serverless environment (Cloudflare Workers, Netlify, Vercel, etc.)

@@ -18,8 +18,18 @@ build:
 
 release:
   extends: .release_image
+  script:
+    - docker pull "$DOCKER_IMAGE_SOURCE_TAG"
+    - docker tag "$DOCKER_IMAGE_SOURCE_TAG" "$DOCKER_IMAGE_TARGET_TAG"
+    - docker push "$DOCKER_IMAGE_TARGET_TAG"
+    - docker login --username yureien --password "$DOCKERHUB_PASSWORD" docker.io
+    - docker tag "$DOCKER_IMAGE_SOURCE_TAG" index.docker.io/yureien/yabin:$CI_COMMIT_SHORT_SHA
+    - docker push index.docker.io/yureien/yabin:$CI_COMMIT_SHORT_SHA
+    - docker push index.docker.io/yureien/yabin:latest
   only:
     - main
+  environment:
+    name: prod
 
 deploy:
   extends: .deploy_kustomize
