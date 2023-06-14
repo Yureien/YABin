@@ -22,6 +22,10 @@ See [API.md](API.md).
 
 ## How to use
 
+**Requirements:** Node.js (tested on 18+, should work with 14+), and a SQL database (tested on PostgreSQL, should work with MySQL and SQLite).
+
+Right now, it is using PostgreSQL (cause I had a server lying around). However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)
+
 #### Locally
 
 ```bash
@@ -40,5 +44,3 @@ docker run --env-file .env -it -p 3000:3000 yureien/yabin:latest
 #### In a serverless environment (Cloudflare Workers, Netlify, Vercel, etc.)
 
 I have not yet tested this, but this is made with SvelteKit. Please take a look at the [SvelteKit documentation](https://kit.svelte.dev/docs/adapters) for more information. If there are any issues, please open an issue, and I will put up a proper guide on how to deploy on such environmments.
-
-**Right now, it is using PostgreSQL (cause I had a server lying around). However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)**
