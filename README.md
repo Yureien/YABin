@@ -1,7 +1,18 @@
-# YABin: Yet Another Pastebin
+<h1 align="center">YABin: Yet Another Pastebin</h1>
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A21C34E)
-![GitHub Sponsor](https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub)
+<p align="center">
+  <a href="https://github.com/sponsors/Yureien"><img src="https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub" alt="GitHub Sponsor" /></a>
+  <a href="https://github.com/Yureien/YABin/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Yureien/YABin.svg" alt="GitHub License" /></a>
+  <img alt="Stars" src="https://img.shields.io/github/stars/Yureien/YABin">
+  <img src="https://img.shields.io/badge/Version-0.1.1" alt="Version 0.1.1" />
+</p>
+<p align="center">
+ <a href="https://ko-fi.com/A0A21C34E"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a>
+</p>
+
+## Demo
+
+![Demo Video](demo.webp)
 
 ## Why (yet) another pastebin?
 
