@@ -25,6 +25,7 @@ release:
     - docker login --username yureien --password "$DOCKERHUB_PASSWORD" docker.io
     - docker tag "$DOCKER_IMAGE_SOURCE_TAG" index.docker.io/yureien/yabin:$CI_COMMIT_SHORT_SHA
     - docker push index.docker.io/yureien/yabin:$CI_COMMIT_SHORT_SHA
+    - docker tag index.docker.io/yureien/yabin:$CI_COMMIT_SHORT_SHA index.docker.io/yureien/yabin:latest
     - docker push index.docker.io/yureien/yabin:latest
   only:
     - main
