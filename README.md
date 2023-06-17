@@ -20,7 +20,19 @@ Well, cause no pastebin I could find had ALL of the following features:
 
 See [API.md](API.md).
 
-## How to use
+## CLI Usage
+
+### Installation and Usage
+
+```bash
+pip install yabin
+yabin create
+yabin read "<URL>"
+```
+
+See [cli/README.md](cli/README.md) for detailed instructions and library usage.
+
+## How to Host
 
 **Requirements:** Node.js (tested on 18+, should work with 14+), and a SQL database (tested on PostgreSQL, should work with MySQL and SQLite).
 
@@ -41,6 +53,6 @@ yarn dev
 docker run --env-file .env -it -p 3000:3000 yureien/yabin:latest
 ```
 
-#### In a serverless environment (Cloudflare Workers, Netlify, Vercel, etc.)
+#### In a Serverless Environment (Cloudflare Workers, Netlify, Vercel, etc.)
 
 I have not yet tested this, but this is made with SvelteKit. Please take a look at the [SvelteKit documentation](https://kit.svelte.dev/docs/adapters) for more information. If there are any issues, please open an issue, and I will put up a proper guide on how to deploy on such environmments.

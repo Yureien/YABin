@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "yabin"
+version = "0.1.1"
+description = "CLI client for YAbin"
+authors = ["Soham Sen <contact@sohamsen.me>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+yabin = "yabin.cli:cli"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pycryptodome = "^3.18.0"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
