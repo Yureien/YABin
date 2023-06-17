@@ -88,6 +88,12 @@
 						href="https://github.com/Yureien/YABin">open-source</a
 					> and easily self-hostable.
 				</li>
+				<li>
+					<a
+						class="underline underline-offset-2"
+						href="https://github.com/Yureien/YABin/tree/main/cli">CLI Client!</a
+					>
+				</li>
 				<li>It can even be run in serverless environments!</li>
 			</ul>
 
@@ -102,7 +108,14 @@
 		<div class="mt-8">
 			<h1 class="text-4xl">Support the development</h1>
 			<p class="mt-2">
-				If you really like this project, I'd love it if you <a
+				If you really like this project, I'd love it if you can give me a <a
+					class="underline underline-offset-2"
+					href="https://github.com/Yureien/YABin"
+					aria-label="Star Yureien/YABin on GitHub">Star</a
+				> on GitHub! That provides me with motivation, seeing people use stuff I make.
+			</p>
+			<p>
+				If you do not mind donating, then please <a
 					href="https://ko-fi.com/A0A21C34E"
 					target="_blank"
 					><img
@@ -116,15 +129,7 @@
 					src="https://github.com/sponsors/Yureien/button"
 					title="Sponsor Yureien"
 					class="border-0 rounded h-8 inline w-28"
-				/> me on GitHub.
-			</p>
-			<p class="text mt-4">
-				Soon, I will be running managed servers on a custom and short domain. You can support me by
-				subscribing to a monthly service, and you get your own pastebin, with your custom styles,
-				colours, text and more! If you are interested, please send me an email at <a
-					class="underline underline-offset-2"
-					href="mailto:contact@sohamsen.me">contact@sohamsen.me</a
-				>, and I will get back to you as soon as possible.
+				/> me on GitHub. Although, a star on GitHub is more than enough!
 			</p>
 		</div>
 	</div>
