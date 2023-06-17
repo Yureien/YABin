@@ -4,6 +4,7 @@
   <a href="https://github.com/sponsors/Yureien"><img src="https://img.shields.io/github/sponsors/Yureien?label=Sponsor&logo=GitHub" alt="GitHub Sponsor" /></a>
   <a href="https://github.com/Yureien/YABin/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Yureien/YABin.svg" alt="GitHub License" /></a>
   <img alt="Stars" src="https://img.shields.io/github/stars/Yureien/YABin">
+  <a href="https://bin.sohamsen.me/"><img src="https://img.shields.io/website-up-down-green-red/https/bin.sohamsen.me.svg" alt="Demo Website" /></a>
 </p>
 <p align="center">
  <a href="https://ko-fi.com/A0A21C34E"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a>
