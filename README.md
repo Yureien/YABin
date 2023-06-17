@@ -14,6 +14,7 @@ Well, cause no pastebin I could find had ALL of the following features:
  - View raw pastes. Normally, encrypted pastebins do not have this. With this site, you can either get the Base64-encoded encrypted paste, or decrypt it on the server side (even with the password) and get the raw paste.
  - Keyboard shortcuts!
  - And of course, being fully open-source and easily self-hostable.
+ - **Comes with a CLI tool to create and read pastes from the command line!**
  - **It can even be run on edge servers and in serverless environments!**
 
  ## API Documentation
