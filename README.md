@@ -68,3 +68,9 @@ docker run --env-file .env -it -p 3000:3000 yureien/yabin:latest
 #### In a Serverless Environment (Cloudflare Workers, Netlify, Vercel, etc.)
 
 I have not yet tested this, but this is made with SvelteKit. Please take a look at the [SvelteKit documentation](https://kit.svelte.dev/docs/adapters) for more information. If there are any issues, please open an issue, and I will put up a proper guide on how to deploy on such environmments.
+
+## Public Instances
+
+If you host one and want to make it public, just open an issue and I will add it here!
+
+1. [bin.sohamsen.me](https://bin.sohamsen.me) ![Website Status](https://img.shields.io/website-up-down-green-red/https/bin.sohamsen.me.svg)
