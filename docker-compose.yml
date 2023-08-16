@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+  yabin:
+    ports:
+      - '3000:3000'
+    image: 'yureien/yabin:latest'
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/yabin?schema=public
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=yabin
+    volumes:
+      - db_data:/var/lib/postgresql/data:Z
+    restart: always
+volumes:
+  db_data: {}
