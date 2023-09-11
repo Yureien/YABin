@@ -48,7 +48,7 @@ See [cli/README.md](cli/README.md) for detailed instructions and library usage.
 
 **Requirements:** Node.js (tested on 18+, should work with 14+), and a SQL database (tested on PostgreSQL, should work with MySQL and SQLite).
 
-Right now, it is using PostgreSQL (cause I had a server lying around). However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)
+Right now, my instance is using PostgreSQL on Vercel. However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)
 
 #### Locally
 
