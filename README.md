@@ -63,11 +63,18 @@ yarn dev
 
 ```bash
 docker run --env-file .env -it -p 3000:3000 yureien/yabin:latest
+# Or with Docker Compose
+# Remember to change the DB password!
+docker compose up
 ```
 
-#### In a Serverless Environment (Cloudflare Workers, Netlify, Vercel, etc.)
+_Fun fact: At a point of time, my instance used to be hosted in a Kubernetes cluster_
+
+#### Other Serverless Environments (Cloudflare Workers, Netlify etc.)
 
 I have not yet tested this, but this is made with SvelteKit. Please take a look at the [SvelteKit documentation](https://kit.svelte.dev/docs/adapters) for more information. If there are any issues, please open an issue, and I will put up a proper guide on how to deploy on such environmments.
+
+My instance uses Vercel. Checkout the `vercel` branch for the Vercel configuration.
 
 ## Public Instances
 
