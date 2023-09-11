@@ -11,9 +11,10 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=yabin
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: yabin
+      POSTGRES_HOST_AUTH_METHOD: "trust"
     volumes:
       - db_data:/var/lib/postgresql/data:Z
     restart: always
