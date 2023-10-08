@@ -10,6 +10,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String      @id @default(nanoid(16))
+  username  String      @unique
+  email     String      @unique
+  password  String
+  name      String
+  verified  Boolean     @default(false)
+  pastes    Paste[]
+  AuthToken AuthToken[]
+}
+
+model AuthToken {
+  id        String   @id @default(nanoid(16))
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Paste {
   id                BigInt    @id @default(autoincrement())
   createdAt         DateTime  @default(now())
@@ -22,6 +42,8 @@ model Paste {
   expiresAt         DateTime?
   expiresCount      Int?
   readCount         Int       @default(0)
+  ownerId           String?
+  owner             User?     @relation(fields: [ownerId], references: [id], onDelete: SetNull)
 
   @@index([key])
 }

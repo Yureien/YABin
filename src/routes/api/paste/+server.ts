@@ -1,7 +1,8 @@
 import { json, type HttpError, type RequestHandler } from '@sveltejs/kit';
-import type { Paste, PasteCreateResponse } from '$lib/types';
+import type { Paste, PasteCreateResponse, PastePatch, PastePatchResponse } from '$lib/types';
 import prisma from '@db';
 import { getPaste } from '$lib/server/services.js';
+import { getUserIdFromCookie } from '$lib/server/auth';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const key = url.searchParams.get('key');
@@ -34,8 +35,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	return json(response);
 };
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ cookies, request }) => {
 	const { content, config, passwordProtected, initVector }: Paste = await request.json();
+
+	const userId = await getUserIdFromCookie(cookies);
 
 	let attempts = 0;
 	let keyLength = 5;
@@ -58,7 +61,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			passwordProtected,
 			expiresCount: config?.burnAfterRead ? 2 : null,
 			initVector,
-			expiresAt: config?.expiresAfter ? new Date(Date.now() + config.expiresAfter * 1000) : null
+			expiresAt: config?.expiresAfter ? new Date(Date.now() + config.expiresAfter * 1000) : null,
+			ownerId: userId
 		}
 	});
 
@@ -68,6 +72,50 @@ export const POST: RequestHandler = async ({ request }) => {
 	};
 
 	return json(response);
+};
+
+export const PATCH: RequestHandler = async ({ cookies, request }) => {
+	const { key, content, encrypted, initVector }: PastePatch = await request.json();
+
+	const userId = await getUserIdFromCookie(cookies);
+
+	if (!key && !content) {
+		return json({ success: false, error: 'No key provided' } as PastePatchResponse, {
+			status: 400
+		});
+	}
+
+	if (encrypted && !initVector) {
+		return json({ success: false, error: 'No initVector provided' } as PastePatchResponse, {
+			status: 400
+		});
+	}
+
+	const paste = await prisma.paste.findUnique({ where: { key } });
+	if (!paste) {
+		return json({ success: false, error: 'Paste not found' } as PastePatchResponse, {
+			status: 404
+		});
+	}
+
+	if (paste.ownerId !== userId) {
+		return json({ success: false, error: 'Unauthorized' } as PastePatchResponse, {
+			status: 401
+		});
+	}
+
+	await prisma.paste.update({
+		where: { key },
+		data: {
+			content,
+			initVector
+		}
+	});
+
+	return json({
+		success: true,
+		data: { key }
+	});
 };
 
 function randomString(length: number) {

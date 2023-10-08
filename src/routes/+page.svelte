@@ -6,6 +6,10 @@
 	import Select from 'svelte-select';
 	import { encrypt, encryptWithPassword } from '$lib/crypto';
 	import Hamburger from '$lib/components/Hamburger.svelte';
+	import { PUBLIC_REGISRATION_ENABLED } from '$env/static/public';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	const initialConfig: PasteConfig = {
 		language: 'plaintext',
@@ -209,7 +213,7 @@
 				Save
 			</button>
 
-			<div class="flex flex-row gap-4 mb-4 justify-center">
+			<div class="flex flex-row gap-4 justify-center">
 				<button class="underline underline-offset-4 py-1" title="{cmdKey}+N" on:click={newPaste}>
 					New
 				</button>
@@ -221,6 +225,19 @@
 					Info
 				</button>
 			</div>
+
+			{#if PUBLIC_REGISRATION_ENABLED == 'true'}
+				<div class="flex flex-row gap-4 mb-4 justify-center">
+					{#if data.loggedIn}
+						<form action="/logout" method="post">
+							<button class="underline underline-offset-4 py-1">Logout</button>
+						</form>
+					{:else}
+						<a class="underline underline-offset-4 py-1" href="/login">Login</a>
+						<a class="underline underline-offset-4 py-1" href="/register">Register</a>
+					{/if}
+				</div>
+			{/if}
 
 			<Select
 				class="px-1 py-1"
@@ -245,6 +262,7 @@
 				type="text"
 				class="bg-dark px-2 py-1 w-full"
 				placeholder="Password"
+				autocomplete="new-password"
 				disabled={!config.encrypted}
 				bind:value={password}
 			/>

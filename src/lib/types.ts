@@ -12,6 +12,13 @@ export interface Paste {
 	initVector?: string;
 }
 
+export interface PastePatch {
+	key: string;
+	content: string;
+	encrypted?: boolean;
+	initVector?: string;
+}
+
 export interface PasteCreateResponse {
 	success: boolean;
 	data?: {
@@ -21,4 +28,12 @@ export interface PasteCreateResponse {
 		message: string;
 		code: number;
 	};
+}
+
+export interface PastePatchResponse {
+	success: boolean;
+	data?: {
+		key: string;
+	};
+	error?: string;
 }
