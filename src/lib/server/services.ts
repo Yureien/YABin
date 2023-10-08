@@ -11,7 +11,8 @@ export async function getPaste(key: string) {
 			initVector: true,
 			language: true,
 			expiresCount: true,
-			readCount: true
+			readCount: true,
+			ownerId: true
 		}
 	});
 
@@ -28,9 +29,9 @@ export async function getPaste(key: string) {
 		throw error(404, 'Not found');
 	}
 
-	const { content, encrypted, passwordProtected, initVector, language } = data;
+	const { content, encrypted, passwordProtected, initVector, language, ownerId } = data;
 
-	return { key, content, encrypted, passwordProtected, initVector, language };
+	return { key, content, encrypted, passwordProtected, initVector, language, ownerId };
 }
 
 export async function deleteExpiredPastes() {

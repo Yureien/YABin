@@ -25,6 +25,7 @@ Well, cause no pastebin I could find had ALL of the following features:
  - View raw pastes. Normally, encrypted pastebins do not have this. With this site, you can either get the Base64-encoded encrypted paste, or decrypt it on the server side (even with the password) and get the raw paste.
  - Keyboard shortcuts!
  - And of course, being fully open-source and easily self-hostable.
+ - **NEW** Ability to edit pastes after creation, and a dashboard for viewing all your pastes.
  - **Comes with a CLI tool to create and read pastes from the command line!**
  - **It can even be run on edge servers and in serverless environments!**
 
@@ -49,6 +50,16 @@ See [cli/README.md](cli/README.md) for detailed instructions and library usage.
 **Requirements:** Node.js (tested on 18+, should work with 14+), and a SQL database (tested on PostgreSQL, should work with MySQL and SQLite).
 
 Right now, my instance is using PostgreSQL on Vercel. However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)
+
+### .env Configuration
+
+`DATABASE_URL` needs to point to a running SQL database. It uses PostgreSQL by default, but can be changed to MySQL or SQLite by modifying the provider in [schema.prisma](src/lib/server/prisma/schema.prisma).
+
+Remember to modify `SALT` to something secure if you plan on using user accounts.
+
+You can disable or enable public registration by modifying the `PUBLIC_REGISRATION_ENABLED` variable to `true` or `false`.
+
+By default, if no e-mail services are configured, all user accounts will be marked as validated. To enable e-mail validation, please configure the `MAIL_*` variables.
 
 #### Locally
 

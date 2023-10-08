@@ -3,24 +3,18 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import type { PasteCreateResponse, PastePatch } from '$lib/types';
+	import { encrypt, encryptWithPassword } from '$lib/crypto';
 
 	export let data: PageData;
-	let { isOwner, content, contentHtml, language, encrypted, passwordProtected, initVector } = data;
+	let { isOwner, content, encrypted, passwordProtected, initVector } = data;
 	let password = '';
 	let isDecrypted = false;
-	let codeRef: HTMLElement;
 	let pwInputRef: HTMLInputElement;
 	let error: string;
 
-	$: if (isDecrypted && codeRef && language && language !== 'plaintext') {
-		(async () => {
-			const Prism = (await import('prismjs')).default;
-			const script = document.createElement('script');
-			script.async = true;
-			script.src = `https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-${language}.min.js`;
-			script.onload = () => Prism.highlightAll();
-			document.body.appendChild(script);
-		})();
+	if (!isOwner) {
+		error = 'You are not the owner of this paste';
 	}
 
 	let cmdKey = 'Ctrl';
@@ -33,6 +27,11 @@
 		pwInputRef?.focus();
 
 		document.addEventListener('keydown', (e) => {
+			if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+				e.preventDefault();
+				savePaste();
+			}
+
 			if (e.key === 'n' && (e.ctrlKey || e.metaKey)) {
 				e.preventDefault();
 				goto('/');
@@ -43,16 +42,6 @@
 				goto('/info');
 			}
 
-			if (e.key === 'e' && (e.ctrlKey || e.metaKey) && isOwner) {
-				e.preventDefault();
-				editPaste();
-			}
-
-			if (e.key === 'c' && e.altKey && e.shiftKey) {
-				e.preventDefault();
-				copyContent();
-			}
-
 			if (encrypted && passwordProtected && !isDecrypted && e.key === 'Enter') {
 				e.preventDefault();
 				decryptPassword();
@@ -60,7 +49,6 @@
 		});
 
 		if (encrypted && !passwordProtected) {
-			contentHtml = 'Decrypting...';
 			(async () => {
 				try {
 					const keyStr = $page.url.hash.slice(1);
@@ -90,29 +78,53 @@
 		}
 	}
 
-	function copyContent() {
-		navigator.clipboard.writeText(content);
-	}
+	async function savePaste() {
+		if (!content) return;
 
-	function editPaste() {
-		const key = $page.params.key;
-		const keyStr = $page.url.hash.slice(1);
-		goto(`/${key}/edit#${keyStr}`);
-	}
+		let finalContent = content;
+		let urlParams = '';
+		let passwordProtected = false;
+		let initVector: string | undefined;
 
-	function openRaw() {
-		const url = new URL($page.url.toString());
-		url.searchParams.set('r', '');
-		const confirmMsg =
-			"WARNING: Getting the raw will decrypt the content on the server. It's not recommended to get the raw if the content is encrypted. Continue?";
-
-		if (encrypted && !passwordProtected) {
-			if (!confirm(confirmMsg)) return;
-			url.searchParams.set('k', decodeURIComponent(url.hash.slice(1)));
-			url.hash = '';
+		if (encrypted) {
+			if (password) {
+				passwordProtected = true;
+				const { ciphertext, iv } = await encryptWithPassword(content, password);
+				finalContent = ciphertext;
+				initVector = iv;
+			} else {
+				const keyStr = $page.url.hash.slice(1);
+				const { ciphertext, iv } = await encrypt(content, decodeURIComponent(keyStr));
+				finalContent = ciphertext;
+				initVector = iv;
+				urlParams = `#${keyStr}`;
+			}
 		}
-		if (passwordProtected) url.searchParams.set('p', password);
-		window.open(url.toString(), '_self');
+
+		const data: PastePatch = {
+			key: $page.params.key,
+			content: finalContent,
+			encrypted,
+			initVector
+		};
+
+		try {
+			const response = await fetch('/api/paste', {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+			const json: PasteCreateResponse = await response.json();
+			if (json.success) {
+				await goto(`/${json.data?.key}${urlParams}`);
+			} else {
+				console.log(json);
+			}
+		} catch (e) {
+			console.log(e);
+		}
 	}
 </script>
 
@@ -138,36 +150,16 @@
 			</button>
 
 			<button
-				class="underline underline-offset-4 px-2 py-1"
-				title={encrypted ? 'Warning: If you get the raw, it will decrypt on the server' : ''}
-				on:click={openRaw}
-			>
-				Raw
-			</button>
-
-			{#if isOwner}
-				<button
-					class="bg-pink-500 text-black text-lg px-4 py-1"
-					title="{cmdKey}+E"
-					on:click={editPaste}>Edit</button
-				>
-			{/if}
-
-			<button
 				class="bg-amber-500 text-black text-lg px-4 py-1"
-				title="{cmdKey}+C"
-				on:click={copyContent}
+				title="{cmdKey}+S"
+				on:click={savePaste}
 			>
-				Copy
+				Save
 			</button>
 		</div>
 	</div>
 
-	{#if !encrypted}
-		<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
-			{@html contentHtml}
-		</div>
-	{:else if error}
+	{#if error}
 		<div class="md:mt-10 text-center text-lg">
 			{error}
 		</div>
@@ -185,26 +177,10 @@
 			</button>
 		</div>
 	{:else}
-		<div class="grow whitespace-pre bg-dark p-4 overflow-x-scroll">
-			<pre><code bind:this={codeRef} class="language-{language}">{content}</code></pre>
-		</div>
+		<textarea
+			class="px-2 grow border-none outline-none bg-transparent resize-none"
+			spellcheck="false"
+			bind:value={content}
+		/>
 	{/if}
 </div>
-
-<svelte:head>
-	<link
-		rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
-		integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg=="
-		crossorigin="anonymous"
-		referrerpolicy="no-referrer"
-	/>
-</svelte:head>
-
-<style>
-	pre {
-		background-color: var(--color-dark) !important;
-		padding: 0 !important;
-		margin: 0 !important;
-	}
-</style>
