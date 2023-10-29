@@ -6,7 +6,7 @@
 	import Select from 'svelte-select';
 	import { encrypt, encryptWithPassword } from '$lib/crypto';
 	import Hamburger from '$lib/components/Hamburger.svelte';
-	import { PUBLIC_REGISRATION_ENABLED } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import type { PageData } from './$types';
 	import { DHMToSeconds, secondsToDHM } from '$lib/utils/time';
 
@@ -214,7 +214,7 @@
 				</button>
 			</div>
 
-			{#if PUBLIC_REGISRATION_ENABLED == 'true'}
+			{#if env.PUBLIC_REGISRATION_ENABLED == 'true'}
 				<div class="flex flex-row gap-4 mb-4 justify-center">
 					{#if data.loggedIn}
 						<a href="/dashboard/settings" class="underline underline-offset-4 py-1">Dashboard</a>

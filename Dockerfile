@@ -2,7 +2,8 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json yarn.lock src/lib/server/prisma/schema.prisma ./
+COPY package.json yarn.lock ./
+COPY src/lib/server/prisma/ src/lib/server/prisma/
 
 RUN yarn install --frozen-lockfile
 
@@ -19,7 +20,7 @@ RUN npm install -g prisma pm2
 
 COPY scripts/ scripts/
 COPY package.json yarn.lock process.yml ./
-COPY src/lib/server/prisma/ prisma/
+COPY src/lib/server/prisma/ src/lib/server/prisma/
 
 RUN yarn install --frozen-lockfile --production
 

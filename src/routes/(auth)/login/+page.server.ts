@@ -3,7 +3,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import prisma from '@db';
 import { hashPassword } from '$lib/crypto';
 import { nanoid } from 'nanoid';
-import { SALT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
@@ -16,7 +16,7 @@ export const actions: Actions = {
 			return fail(400, { success: false, errors: ['All fields are required'] });
 		}
 
-		const hashedPassword = await hashPassword(password.toString(), SALT);
+		const hashedPassword = await hashPassword(password.toString(), env.SALT);
 		const user = await prisma.user.findFirst({
 			where: {
 				OR: [

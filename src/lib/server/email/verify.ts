@@ -1,4 +1,4 @@
-import { PUBLIC_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import prisma from '@db';
 import { generateVerificationHash } from '../auth';
 import { sendEmail } from './base';
@@ -9,7 +9,7 @@ export const sendVerificationEmail = async (userId: string) => {
 
 	const hash = await generateVerificationHash(userId);
 
-	const verifyUrl = `${PUBLIC_URL}/validate?hash=${encodeURIComponent(
+	const verifyUrl = `${env.PUBLIC_URL}/validate?hash=${encodeURIComponent(
 		hash
 	)}&userId=${encodeURIComponent(userId)}`;
 

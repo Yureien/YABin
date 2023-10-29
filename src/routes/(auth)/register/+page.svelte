@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { PUBLIC_REGISRATION_ENABLED } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import type { ActionData } from './$types';
 
 	export let form: ActionData;
@@ -20,7 +20,7 @@
 			<div class="text-green-500 text-center">{form.message}</div>
 		{/if}
 
-		{#if PUBLIC_REGISRATION_ENABLED == 'true'}
+		{#if env.PUBLIC_REGISRATION_ENABLED == 'true'}
 			<form method="post" class="mt-2 flex flex-col gap-4" use:enhance>
 				<div>
 					<label for="username" class="px-2 py-2">Name</label>
