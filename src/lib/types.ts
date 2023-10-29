@@ -37,3 +37,11 @@ export interface PastePatchResponse {
 	};
 	error?: string;
 }
+
+export interface UserSettings {
+	defaults?: {
+		encrypted?: boolean;
+		burnAfterRead?: boolean;
+		expiresAfterSeconds?: number;
+	};
+}

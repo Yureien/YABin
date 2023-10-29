@@ -17,6 +17,7 @@ model User {
   password  String
   name      String
   verified  Boolean     @default(false)
+  settings  Json        @default("{}")
   pastes    Paste[]
   AuthToken AuthToken[]
 }

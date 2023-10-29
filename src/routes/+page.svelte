@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { languageKeysByName } from '$lib/data';
-	import type { Paste, PasteConfig, PasteCreateResponse } from '$lib/types';
+	import type { Paste, PasteConfig, PasteCreateResponse, UserSettings } from '$lib/types';
 	import { onMount } from 'svelte';
 	import Select from 'svelte-select';
 	import { encrypt, encryptWithPassword } from '$lib/crypto';
 	import Hamburger from '$lib/components/Hamburger.svelte';
 	import { PUBLIC_REGISRATION_ENABLED } from '$env/static/public';
 	import type { PageData } from './$types';
+	import { DHMToSeconds, secondsToDHM } from '$lib/utils/time';
 
 	export let data: PageData;
 
@@ -25,42 +26,18 @@
 	} = {};
 
 	$: {
-		if (expiresAfter.days) {
-			expiresAfter.days = Math.max(0, Math.round(expiresAfter.days));
-		}
-		if (expiresAfter.hours) {
-			expiresAfter.hours = Math.max(0, Math.round(expiresAfter.hours));
-			if (expiresAfter.hours > 23) {
-				expiresAfter.days ??= 0;
-				expiresAfter.days += Math.floor(expiresAfter.hours / 24);
-				expiresAfter.hours = expiresAfter.hours % 24;
-			}
-		}
-		if (expiresAfter.minutes) {
-			expiresAfter.minutes = Math.max(0, Math.round(expiresAfter.minutes));
-			if (expiresAfter.minutes > 59) {
-				expiresAfter.days ??= 0;
-				expiresAfter.hours ??= 0;
-				expiresAfter.days += Math.floor(expiresAfter.minutes / 1440);
-				expiresAfter.hours += Math.floor((expiresAfter.minutes % 1440) / 60);
-				expiresAfter.minutes = expiresAfter.minutes % 60;
-			}
-
-			if (
-				!expiresAfter.days &&
-				!expiresAfter.hours &&
-				expiresAfter.minutes > 0 &&
-				expiresAfter.minutes < 5
-			) {
-				expiresAfter.minutes = 5;
-			}
+		let expiresAfterSeconds = DHMToSeconds(expiresAfter);
+		// Don't allow pastes to be saved for more than a year
+		expiresAfterSeconds = Math.min(expiresAfterSeconds, 365 * 24 * 60 * 60);
+		// Don't allow pastes to be saved for less than 5 minutes
+		if (expiresAfterSeconds > 0) {
+			expiresAfterSeconds = Math.max(expiresAfterSeconds, 5 * 60);
+			expiresAfter = secondsToDHM(expiresAfterSeconds);
+		} else {
+			expiresAfter = {};
 		}
 
-		config.expiresAfter =
-			((expiresAfter.days ?? 0) * 1440 +
-				(expiresAfter.hours ?? 0) * 60 +
-				(expiresAfter.minutes ?? 0)) *
-			60;
+		config.expiresAfter = expiresAfterSeconds;
 	}
 
 	let inputRef: HTMLTextAreaElement;
@@ -70,6 +47,17 @@
 	let password: string = '';
 	let config: PasteConfig = { ...initialConfig };
 	let sidebarOpen = false;
+
+	const updateInitialConfig = (defaults: UserSettings['defaults']) => {
+		if (!defaults) return;
+		if (defaults?.encrypted !== undefined) config.encrypted = defaults.encrypted;
+		if (defaults?.burnAfterRead !== undefined) config.burnAfterRead = defaults.burnAfterRead;
+		if (defaults?.expiresAfterSeconds) {
+			expiresAfter = secondsToDHM(defaults.expiresAfterSeconds);
+			config.expiresAfter = defaults.expiresAfterSeconds;
+		}
+	};
+	$: updateInitialConfig(data?.settings?.defaults);
 
 	let _sessionStorage: Storage | undefined;
 
@@ -84,7 +72,7 @@
 		if (contentBackup) {
 			const data: { content: string; config: PasteConfig } = JSON.parse(contentBackup);
 			content = data.content;
-			config = data.config;
+			config = { ...config, language: data.config.language ?? config.language };
 		}
 
 		inputRef.focus();
@@ -229,6 +217,7 @@
 			{#if PUBLIC_REGISRATION_ENABLED == 'true'}
 				<div class="flex flex-row gap-4 mb-4 justify-center">
 					{#if data.loggedIn}
+						<a href="/dashboard/settings" class="underline underline-offset-4 py-1">Dashboard</a>
 						<form action="/logout" method="post">
 							<button class="underline underline-offset-4 py-1">Logout</button>
 						</form>
