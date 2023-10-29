@@ -3,15 +3,15 @@ import { fail, redirect } from '@sveltejs/kit';
 import prisma from '@db';
 import { hashPassword } from '$lib/crypto';
 import { nanoid } from 'nanoid';
-import { MAIL_ENABLED, SALT } from '$env/static/private';
-import { PUBLIC_REGISRATION_ENABLED } from '$env/static/public';
+import { env } from '$env/dynamic/private';
+import { env as envPublic } from '$env/dynamic/public';
 import { sendVerificationEmail } from '$lib/server/email/verify';
 
 const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
-		if (PUBLIC_REGISRATION_ENABLED !== 'true') {
+		if (envPublic.PUBLIC_REGISRATION_ENABLED !== 'true') {
 			return fail(404, { success: false, errors: ['Not found'] });
 		}
 
@@ -70,12 +70,12 @@ export const actions: Actions = {
 					name: name.toString(),
 					username: username.toString(),
 					email: email.toString(),
-					password: await hashPassword(password.toString(), SALT),
+					password: await hashPassword(password.toString(), env.SALT),
 					verified: false
 				}
 			});
 
-			if (MAIL_ENABLED === 'true') {
+			if (env.MAIL_ENABLED === 'true') {
 				const sentVerificationEmail = await sendVerificationEmail(user.id);
 				if (sentVerificationEmail) {
 					return { success: true, message: 'Please check your e-mail for verification link' };

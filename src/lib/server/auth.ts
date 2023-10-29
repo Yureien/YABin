@@ -1,4 +1,4 @@
-import { SALT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { hashPassword } from '$lib/crypto';
 import prisma from '@db';
 import type { Cookies } from '@sveltejs/kit';
@@ -21,7 +21,7 @@ export const generateVerificationHash = async (userId: string) => {
 	const user = await prisma.user.findUnique({ where: { id: userId } });
 	if (!user) throw new Error('User not found');
 
-	const hash = await hashPassword(`${user.email}${user.id}${user.password}${user.verified}`, SALT);
+	const hash = await hashPassword(`${user.email}${user.id}${user.password}${user.verified}`, env.SALT);
 	return hash;
 };
 
@@ -31,7 +31,7 @@ export const validateVerificationHash = async (userId: string, hash: string) => 
 
 	const newHash = await hashPassword(
 		`${user.email}${user.id}${user.password}${user.verified}`,
-		SALT
+		env.SALT
 	);
 	if (newHash !== hash) return false;
 
