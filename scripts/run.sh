@@ -1,3 +1,3 @@
 #!/bin/sh
-prisma --schema=./src/lib/server/prisma/schema.prisma migrate deploy
+prisma migrate deploy --schema=./src/lib/server/prisma/schema.prisma
 pm2-runtime process.yml
