@@ -11,15 +11,16 @@ datasource db {
 }
 
 model User {
-  id        String      @id @default(nanoid(16))
-  username  String      @unique
-  email     String      @unique
-  password  String
-  name      String
-  verified  Boolean     @default(false)
-  settings  Json        @default("{}")
-  pastes    Paste[]
-  AuthToken AuthToken[]
+  id          String      @id @default(nanoid(16))
+  username    String      @unique
+  email       String      @unique
+  password    String
+  name        String
+  verified    Boolean     @default(false)
+  settings    Json        @default("{}")
+  pastes      Paste[]
+  AuthToken   AuthToken[]
+  ResetToken  ResetToken?
 }
 
 model AuthToken {
@@ -28,6 +29,15 @@ model AuthToken {
   expiresAt DateTime
   token     String   @unique
   userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ResetToken {
+  id        String   @id @default(nanoid(16))
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  token     String   @unique
+  userId    String   @unique
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
