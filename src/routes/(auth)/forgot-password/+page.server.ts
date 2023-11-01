@@ -1,7 +1,14 @@
-import type { Actions } from './$types';
-import { fail } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
+import { redirect, fail } from '@sveltejs/kit';
 import prisma from '@db';
-import { nanoid } from 'nanoid';
+import { env } from '$env/dynamic/private';
+import { sendResetEmail } from '$lib/server/email/reset-password';
+
+export const load: PageServerLoad = async () => {
+	if (env.MAIL_ENABLED === 'false') {
+		throw redirect(303, '/');
+	}
+};
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -22,28 +29,12 @@ export const actions: Actions = {
 		if (!user) {
 			return fail(400, { success: false, errors: ['Username or e-mail not found'] });
 		}
-
-		await prisma.resetToken.upsert({
-			where: {
-				userId: user.id
-			},
-			update: {
-				createdAt: new Date(),
-				expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
-				token: nanoid(32)
-			},
-			create: {
-				user: {
-					connect: {
-						id: user.id
-					}
-				},
-				createdAt: new Date(),
-				expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
-				token: nanoid(32)
+		
+		if (env.MAIL_ENABLED === 'true') {
+			const sentVerificationEmail = await sendResetEmail(user.id);
+			if (sentVerificationEmail) {
+				return { success: true, message: 'Please check e-mail for a password reset link' };
 			}
-		});
-
-		return { success: true, message: 'Please check e-mail for a password reset link' };
+		}
 	}
 };

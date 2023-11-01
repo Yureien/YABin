@@ -2,6 +2,7 @@ import { env } from '$env/dynamic/private';
 import { hashPassword } from '$lib/crypto';
 import prisma from '@db';
 import type { Cookies } from '@sveltejs/kit';
+import { nanoid } from 'nanoid';
 
 export const getUserIdFromCookie = async (cookies: Cookies) => {
 	const token = cookies.get('token');
@@ -37,4 +38,32 @@ export const validateVerificationHash = async (userId: string, hash: string) => 
 
 	await prisma.user.update({ where: { id: userId }, data: { verified: true } });
 	return true;
+};
+
+export const generatePasswordResetToken = async (userId: string) => {
+	const user = await prisma.user.findUnique({ where: { id: userId } });
+	if (!user) return false;
+
+	const resetToken = await prisma.resetToken.upsert({
+		where: {
+			userId: user.id
+		},
+		update: {
+			createdAt: new Date(),
+			expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+			token: nanoid(32)
+		},
+		create: {
+			user: {
+				connect: {
+					id: user.id
+				}
+			},
+			createdAt: new Date(),
+			expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+			token: nanoid(32)
+		}
+	});
+
+	return resetToken.token;
 };
