@@ -26,11 +26,14 @@ export const actions: Actions = {
 			}
 		});
 
-		if (env.MAIL_ENABLED === 'true' && user) {
-			sendResetEmail(user.id);
+		if (env.MAIL_ENABLED === 'true') {
+			if (user) {
+				sendResetEmail(user.id);
+			}
+			// Return success regardless of whether username/email is found or not
+			return { success: true, message: 'Please check e-mail for a password reset link' };
+		} else {
+			return fail(400, { success: false, errors: ['E-mail is disabled'] });
 		}
-
-		// Success returned regardless of whether username/email is found or not
-		return { success: true, message: 'Please check e-mail for a password reset link' };
 	}
 };
