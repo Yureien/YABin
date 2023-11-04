@@ -6,8 +6,12 @@ import { nanoid } from 'nanoid';
 import { env } from '$env/dynamic/private';
 import { env as envPublic } from '$env/dynamic/public';
 import { sendVerificationEmail } from '$lib/server/email/verify';
-
-const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+import {
+	validateEmail,
+	validatePassword,
+	validateName,
+	validateUsername
+} from '$lib/server/validate';
 
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
@@ -29,24 +33,32 @@ export const actions: Actions = {
 			errors.push('All fields are required');
 		}
 
-		if (email && !emailRegex.test(email?.toString())) {
-			errors.push('Invalid email address');
+		try {
+			if (email) validateEmail(email);
+		} catch (e: any) {
+			errors.push(e.message);
 		}
 
-		if (password && password.toString().length < 8) {
-			errors.push('Password must be at least 8 characters long');
+		try {
+			if (password) validatePassword(password);
+		} catch (e: any) {
+			errors.push(e.message);
+		}
+
+		try {
+			if (name) validateName(name);
+		} catch (e: any) {
+			errors.push(e.message);
+		}
+
+		try {
+			if (username) validateUsername(username);
+		} catch (e: any) {
+			errors.push(e.message);
 		}
 
 		if (password && password !== cnfPassword) {
 			errors.push('Passwords do not match');
-		}
-
-		if (name && name.toString().length > 50) {
-			errors.push('Name is too long');
-		}
-
-		if (username && username.toString().length > 50) {
-			errors.push('Username is too long');
 		}
 
 		if (username && email) {
