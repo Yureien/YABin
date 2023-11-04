@@ -20,13 +20,13 @@ export const actions: Actions = {
 			return fail(400, { success: false, errors: ['All fields are required'] });
 		}
 
-		const user = await prisma.user.findFirst({
-			where: {
-				OR: [{ username: usernameOrEmail.toString() }, { email: usernameOrEmail.toString() }]
-			}
-		});
-
 		if (env.MAIL_ENABLED === 'true') {
+			const user = await prisma.user.findFirst({
+				where: {
+					OR: [{ username: usernameOrEmail.toString() }, { email: usernameOrEmail.toString() }]
+				}
+			});
+
 			if (user) {
 				sendResetEmail(user.id);
 			}
