@@ -26,15 +26,11 @@ export const actions: Actions = {
 			}
 		});
 
-		if (!user) {
-			return fail(400, { success: false, errors: ['Username or e-mail not found'] });
+		if (env.MAIL_ENABLED === 'true' && user) {
+			sendResetEmail(user.id);
 		}
-		
-		if (env.MAIL_ENABLED === 'true') {
-			const sentVerificationEmail = await sendResetEmail(user.id);
-			if (sentVerificationEmail) {
-				return { success: true, message: 'Please check e-mail for a password reset link' };
-			}
-		}
+
+		// Success returned regardless of whether username/email is found or not
+		return { success: true, message: 'Please check e-mail for a password reset link' };
 	}
 };
