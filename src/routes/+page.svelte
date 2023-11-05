@@ -148,12 +148,15 @@
 				_sessionStorage?.removeItem('contentBackup');
 				await goto(`/${json.data?.key}${urlParams}`);
 			} else {
+				alert(json.error);
 				console.log(json);
 			}
 		} catch (e) {
 			console.log(e);
 		}
 	};
+
+	$: config.customPath = config.customPath ? config.customPath.substring(0, 16) : undefined;
 </script>
 
 <div class="sm:hidden flex flex-row gap-2 items-center px-4 py-2">
@@ -241,6 +244,15 @@
 				--item-hover-color="#000"
 				--border="0"
 			/>
+
+			{#if env.PUBLIC_CUSTOM_PATHS_ENABLED === 'true' || data.loggedIn}
+				<input
+					type="text"
+					class="bg-dark px-2 py-1 w-full"
+					placeholder="Custom Path"
+					bind:value={config.customPath}
+				/>
+			{/if}
 
 			<div>
 				<label for="encrypted" class="py-1">Encrypted?</label>
