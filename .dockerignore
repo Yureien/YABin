@@ -19,3 +19,4 @@ cli
 .env.example
 k8s
 .github
+.yarn

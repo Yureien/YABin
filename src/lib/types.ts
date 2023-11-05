@@ -3,6 +3,7 @@ export interface PasteConfig {
 	encrypted?: boolean;
 	expiresAfter?: number;
 	burnAfterRead?: boolean;
+	customPath?: string;
 }
 
 export interface Paste {
@@ -24,10 +25,7 @@ export interface PasteCreateResponse {
 	data?: {
 		key: string;
 	};
-	error?: {
-		message: string;
-		code: number;
-	};
+	error?: string;
 }
 
 export interface PastePatchResponse {

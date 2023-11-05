@@ -3,6 +3,7 @@ import type { Paste, PasteCreateResponse, PastePatch, PastePatchResponse } from 
 import prisma from '@db';
 import { getPaste } from '$lib/server/services.js';
 import { getUserIdFromCookie } from '$lib/server/auth';
+import { env } from '$env/dynamic/public';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const key = url.searchParams.get('key');
@@ -40,15 +41,28 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
 	const userId = await getUserIdFromCookie(cookies);
 
-	let attempts = 0;
-	let keyLength = 5;
-	let key = randomString(keyLength);
-	while (await prisma.paste.findUnique({ where: { key } })) {
+	let key: string | undefined = undefined;
+	if (config?.customPath && (env.PUBLIC_CUSTOM_PATHS_ENABLED === 'true' || userId)) {
+		key = config.customPath.substring(0, 16);
+
+		if (await prisma.paste.findUnique({ where: { key } })) {
+			return json({ success: false, error: 'Custom path already exists' } as PasteCreateResponse, {
+				status: 400
+			});
+		}
+	}
+
+	if (!key) {
+		let attempts = 0;
+		let keyLength = 5;
 		key = randomString(keyLength);
-		attempts++;
-		if (attempts > 1) {
-			keyLength++;
-			attempts = 0;
+		while (await prisma.paste.findUnique({ where: { key } })) {
+			key = randomString(keyLength);
+			attempts++;
+			if (attempts > 1) {
+				keyLength++;
+				attempts = 0;
+			}
 		}
 	}
 
