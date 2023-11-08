@@ -1,4 +1,4 @@
-const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+const emailRegex = /^([\w%+-]+\.)*[\w%+-]+@([A-Z0-9-]+\.)+[A-Z0-9-]{2,}$/i;
 const passwordLength = 8;
 const nameLength = 50;
 const usernameLength = 50;
