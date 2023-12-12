@@ -1,10 +1,15 @@
-import type { Actions } from './$types';
+import type { Actions,PageServerLoad } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
 import prisma from '@db';
 import { hashPassword } from '$lib/crypto';
 import { nanoid } from 'nanoid';
 import { env } from '$env/dynamic/private';
+import { getUserIdFromCookie } from '$lib/server/auth';
 
+export const load:PageServerLoad = async({cookies})=>{
+	const userId = await getUserIdFromCookie(cookies);
+	if (userId) throw redirect(303, '/');
+}
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
 		const data = await request.formData();
