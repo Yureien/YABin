@@ -18,18 +18,18 @@
 
 Well, cause no pastebin I could find had ALL of the following features:
 
- - Modern and minimal UI (This site's design was inspired by bin).
- - Optional end-to-end encryption (we're using AES-256-GCM) with optional password protection (using PBKDF2).
- - Syntax highlighting (using Prism) that supports 297 languages.
- - API support to create and get pastes from command line.
- - View raw pastes. Normally, encrypted pastebins do not have this. With this site, you can either get the Base64-encoded encrypted paste, or decrypt it on the server side (even with the password) and get the raw paste.
- - Keyboard shortcuts!
- - And of course, being fully open-source and easily self-hostable.
- - Ability to edit pastes after creation, and a dashboard for viewing all your pastes.
- - **NEW** Feature to use custom path names.
- - **Comes with a CLI tool to create and read pastes from the command line!**
+-   Modern and minimal UI (This site's design was inspired by bin).
+-   Optional end-to-end encryption (we're using AES-256-GCM) with optional password protection (using PBKDF2).
+-   Syntax highlighting (using Prism) that supports 297 languages.
+-   API support to create and get pastes from command line.
+-   View raw pastes. Normally, encrypted pastebins do not have this. With this site, you can either get the Base64-encoded encrypted paste, or decrypt it on the server side (even with the password) and get the raw paste.
+-   Keyboard shortcuts!
+-   And of course, being fully open-source and easily self-hostable.
+-   Ability to edit pastes after creation, and a dashboard for viewing all your pastes.
+-   **NEW** Feature to use custom path names.
+-   **Comes with a CLI tool to create and read pastes from the command line!**
 
- ## API Documentation
+## API Documentation
 
 See [API.md](API.md).
 
