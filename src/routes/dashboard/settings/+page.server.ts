@@ -10,10 +10,20 @@ export const load: PageServerLoad = async ({ cookies }) => {
 
     const user = await prisma.user.findUnique({
         where: { id: userId },
-        select: { settings: true },
+        select: {
+            settings: true,
+            username: true,
+            name: true,
+            email: true
+        },
     });
 
-    return { settings: user?.settings as UserSettings };
+    return {
+        settings: user?.settings as UserSettings,
+        username: user?.username as string,
+        name: user?.name as string,
+        email: user?.email as string
+    };
 };
 
 export const actions: Actions = {
@@ -47,4 +57,12 @@ export const actions: Actions = {
             },
         };
     },
+    changePassword: async ({ cookies, request }) => {
+        
+        return{
+            passwordForm:{
+                success: true
+            }
+        }
+    }
 };

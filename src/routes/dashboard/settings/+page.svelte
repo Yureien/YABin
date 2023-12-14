@@ -43,79 +43,139 @@
 <h1 class="text-5xl">Settings</h1>
 
 <div class="px-4">
-    <h4 class="text-2xl mt-6 mb-4">Defaults</h4>
-
-    <form
-        method="post"
-        action="?/defaults"
-        class="mt-2 flex flex-col gap-4"
-        use:enhance={() => {
-            return async ({ result }) => {
-                if (result.type === 'redirect') await goto(result.location);
-                else await applyAction(result);
-            };
-        }}
-    >
-        <div>
-            <label for="encrypted" class="py-2">Encrypted</label>
-            <input
-                id="encrypted"
-                class="bg-dark px-2 py-1"
-                type="checkbox"
-                name="encrypted"
-                checked={settings?.defaults?.encrypted}
-            />
-        </div>
-
-        <div>
-            <label for="burn-after-read" class="py-2">Burn after read</label>
-            <input
-                id="burn-after-read"
-                class="bg-dark px-2 py-1"
-                type="checkbox"
-                name="burn-after-read"
-                checked={settings?.defaults?.burnAfterRead}
-            />
-        </div>
-
-        <div>
-            <span>Expires in:</span>
-            <div class="grid grid-cols-3 gap-2 justify-center items-center">
-                <input
-                    type="number"
-                    class="bg-dark py-1 text-center"
-                    placeholder="DD"
-                    bind:value={expiresAfter.days}
-                />
-                <input
-                    type="number"
-                    class="bg-dark py-1 text-center"
-                    placeholder="HH"
-                    bind:value={expiresAfter.hours}
-                />
-                <input
-                    type="number"
-                    class="bg-dark py-1 text-center"
-                    placeholder="MM"
-                    bind:value={expiresAfter.minutes}
-                />
-                <input
-                    type="hidden"
-                    name="expires-after-seconds"
-                    bind:value={expiresAfterSeconds}
-                />
+    <div>
+        <h4 class="text-2xl mt-6 mb-4">User</h4>
+        <div class="grid grid-cols-3 px-3">
+             <div class="flex flex-col text-[17px] gap-1"> <!-- putting text size to 17px as it feels like a heading for the detail as lg seems to big -->
+                <h5>Name</h5>
+                <h5>Username</h5>
+                <h5>Email</h5>
+            </div>
+            <div class="flex flex-col gap-1 text-center">
+                <div>-</div>
+                <div>-</div>
+                <div>-</div>
+            </div>
+            <div class="flex flex-col gap-1 text-right">
+                <div>{data?.name}</div>
+                <div>{data?.username}</div>
+                <div>{data?.email}</div>
             </div>
         </div>
-
-        <div class="mt-2">
-            <button class="bg-amber-500 text-black text-lg px-4 py-1"
-                >Save</button
+    </div>
+    <div>
+        <h4 class="text-2xl mt-6 mb-4">Change Password</h4>
+        <div class="px-3">
+            <form 
+                method="post"
+                action="?/changePassword"
+                use:enhance
+                class="grid grid-cols-3"
             >
-            {#if form?.defaultsForm.success}
-                <span class="text-green-500">Saved</span>
-                <!-- {:else if form?.defaultsForm.error}
-				<span class="text-red-500">Error</span> -->
-            {/if}
+            <div class="flex flex-col gap-7">
+                <label for="newPassword">New Password:</label>
+                <label for="confirmPassword">Confirm Password:</label>
+            </div>
+            <div class="flex flex-col gap-7">
+                <input 
+                    type="text"     
+                    name="newPassword" 
+                    class="bg-dark py-1 text-center"
+                >
+                <input 
+                    type="text"     
+                    name="confirmPassword" 
+                    class="bg-dark py-1 text-center"
+                >
+            </div>
+            <div></div>
+            <div class="mt-4">
+                <button class="bg-amber-500 text-black text-lg px-4 py-1"
+                    >Save</button
+                >
+                {#if form?.passwordForm?.success}
+                    <span class="text-green-500">Saved</span>
+                {/if}
+            </div>
+            </form>
         </div>
-    </form>
+    </div>
+    <div>
+        <h4 class="text-2xl mt-6 mb-4">Defaults</h4>
+
+        <form
+            method="post"
+            action="?/defaults"
+            class="mt-2 flex flex-col gap-4 px-3"
+            use:enhance={() => {
+                return async ({ result }) => {
+                    if (result.type === 'redirect') await goto(result.location);
+                    else await applyAction(result);
+                };
+            }}
+        >
+            <div>
+                <label for="encrypted" class="py-2">Encrypted</label>
+                <input
+                    id="encrypted"
+                    class="bg-dark px-2 py-1"
+                    type="checkbox"
+                    name="encrypted"
+                    checked={settings?.defaults?.encrypted}
+                />
+            </div>
+
+            <div>
+                <label for="burn-after-read" class="py-2">Burn after read</label
+                >
+                <input
+                    id="burn-after-read"
+                    class="bg-dark px-2 py-1"
+                    type="checkbox"
+                    name="burn-after-read"
+                    checked={settings?.defaults?.burnAfterRead}
+                />
+            </div>
+
+            <div>
+                <span>Expires in:</span>
+                <div class="grid grid-cols-3 gap-2 justify-center items-center">
+                    <input
+                        type="number"
+                        class="bg-dark py-1 text-center"
+                        placeholder="DD"
+                        bind:value={expiresAfter.days}
+                    />
+                    <input
+                        type="number"
+                        class="bg-dark py-1 text-center"
+                        placeholder="HH"
+                        bind:value={expiresAfter.hours}
+                    />
+                    <input
+                        type="number"
+                        class="bg-dark py-1 text-center"
+                        placeholder="MM"
+                        bind:value={expiresAfter.minutes}
+                    />
+                    <input
+                        type="hidden"
+                        name="expires-after-seconds"
+                        bind:value={expiresAfterSeconds}
+                    />
+                </div>
+            </div>
+
+            <div class="mt-2    ">
+                <button class="bg-amber-500 text-black text-lg px-4 py-1"
+                    >Save</button
+                >
+                {#if form?.defaultsForm!== undefined && form?.defaultsForm.success}
+                    <span class="text-green-500">Saved</span>
+                    <!-- {:else if form?.defaultsForm.error}
+				<span class="text-red-500">Error</span> -->
+                {/if}
+            </div>
+        </form>
+    </div>
 </div>
