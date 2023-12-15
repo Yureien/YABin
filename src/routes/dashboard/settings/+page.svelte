@@ -45,58 +45,61 @@
 <div class="px-4">
     <div>
         <h4 class="text-2xl mt-6 mb-4">User</h4>
-        <div class="grid grid-cols-3 px-3">
-             <div class="flex flex-col text-[17px] gap-1"> <!-- putting text size to 17px as it feels like a heading for the detail as lg seems to big -->
-                <h5>Name</h5>
-                <h5>Username</h5>
-                <h5>Email</h5>
+        <div class="grid grid-cols-3">
+            <div>
+                <!-- putting text size to 17px as it feels like a heading for the detail as lg seems to big -->
+                <div class="text-xl">Name</div>
+                <div class="opacity-80">{data?.name}</div>
             </div>
-            <div class="flex flex-col gap-1 text-center">
-                <div>-</div>
-                <div>-</div>
-                <div>-</div>
+
+            <div class="">
+                <div class="text-xl">Username</div>
+                <div class="opacity-80">{data?.username}</div>
             </div>
-            <div class="flex flex-col gap-1 text-right">
-                <div>{data?.name}</div>
-                <div>{data?.username}</div>
-                <div>{data?.email}</div>
+            <div>
+                <div class="text-xl">Email</div>
+                <div class="opacity-80">{data?.email}</div>
             </div>
         </div>
     </div>
     <div>
         <h4 class="text-2xl mt-6 mb-4">Change Password</h4>
         <div class="px-3">
-            <form 
+            <form
                 method="post"
                 action="?/changePassword"
                 use:enhance
-                class="grid grid-cols-3"
+                class="flex flex-col gap-7"
             >
-            <div class="flex flex-col gap-7">
-                <label for="newPassword">New Password:</label>
-                <label for="confirmPassword">Confirm Password:</label>
-            </div>
-            <div class="flex flex-col gap-7">
-                <input 
-                    type="text"     
-                    name="newPassword" 
-                    class="bg-dark py-1 text-center"
-                >
-                <input 
-                    type="text"     
-                    name="confirmPassword" 
-                    class="bg-dark py-1 text-center"
-                >
-            </div>
-            <div></div>
-            <div class="mt-4">
-                <button class="bg-amber-500 text-black text-lg px-4 py-1"
-                    >Save</button
-                >
-                {#if form?.passwordForm?.success}
-                    <span class="text-green-500">Saved</span>
-                {/if}
-            </div>
+                <div class="flex flex-col lg:w-[40%] w-[80%] gap-1">
+                    <label for="newPassword">New Password:</label>
+                    <input
+                        type="newPassword"
+                        name="newPassword"
+                        class="bg-dark py-1 text-center"
+                    />
+                </div>
+                <div class="flex flex-col lg:w-[40%] w-[80%] gap-1">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input
+                        type="confirmPassword"
+                        name="confirmPassword"
+                        class="bg-dark py-1 text-center"
+                    />
+                </div>
+                <div class="">
+                    <button class="bg-amber-500 text-black text-lg px-4 py-1"
+                        >Save</button
+                    >
+                    {#if form?.passwordForm?.success}
+                        <span class="text-green-500">Saved</span>
+                    {/if}
+                    {#if form?.passwordForm?.success === false}
+                        <span class="text-red-800"
+                            >{form.passwordForm?.error}</span
+                        >
+                    {/if}
+                </div>
             </form>
         </div>
     </div>
@@ -166,11 +169,11 @@
                 </div>
             </div>
 
-            <div class="mt-2    ">
+            <div class="mt-2">
                 <button class="bg-amber-500 text-black text-lg px-4 py-1"
                     >Save</button
                 >
-                {#if form?.defaultsForm!== undefined && form?.defaultsForm.success}
+                {#if form?.defaultsForm !== undefined && form?.defaultsForm.success}
                     <span class="text-green-500">Saved</span>
                     <!-- {:else if form?.defaultsForm.error}
 				<span class="text-red-500">Error</span> -->

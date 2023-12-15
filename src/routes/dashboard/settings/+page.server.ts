@@ -1,8 +1,11 @@
 import { getUserIdFromCookie } from '$lib/server/auth';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import prisma from '@db';
 import type { UserSettings } from '$lib/types';
+import { validatePassword } from '$lib/server/validate';
+import { hashPassword } from '$lib/crypto';
+import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userId = await getUserIdFromCookie(cookies);
@@ -14,7 +17,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
             settings: true,
             username: true,
             name: true,
-            email: true
+            email: true,
         },
     });
 
@@ -22,7 +25,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
         settings: user?.settings as UserSettings,
         username: user?.username as string,
         name: user?.name as string,
-        email: user?.email as string
+        email: user?.email as string,
     };
 };
 
@@ -58,11 +61,65 @@ export const actions: Actions = {
         };
     },
     changePassword: async ({ cookies, request }) => {
-        
-        return{
-            passwordForm:{
-                success: true
-            }
+        const formData = await request.formData();
+        const token = cookies.get('token');
+        if (!token) {
+            return redirect(301, '/login');
         }
-    }
+        const newPassword = formData.get('newPassword');
+        const confirmPassword = formData.get('confirmPassword');
+
+        if (
+            newPassword === '' ||
+            confirmPassword === '' ||
+            typeof newPassword === null ||
+            typeof confirmPassword === null
+        ) {
+            return {
+                passwordForm: {
+                    success: false,
+                    error: 'Missing required fields',
+                },
+            };
+        }
+
+        if (newPassword !== confirmPassword) {
+            return {
+                passwordForm: {
+                    success: false,
+                    error: 'Passwords do not match',
+                },
+            };
+        }
+
+        try {
+            if (newPassword) validatePassword(newPassword);
+        } catch (err: any) {
+            return {
+                passwordForm: {
+                    success: false,
+                    error: err.message,
+                },
+            };
+        }
+
+        const userId = await getUserIdFromCookie(cookies);
+        if (userId && newPassword) {
+            const hash = await hashPassword(newPassword.toString(), env.SALT);
+            const user = await prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    password: hash,
+                },
+            });
+        }
+
+        return {
+            passwordForm: {
+                success: true,
+            },
+        };
+    },
 };
