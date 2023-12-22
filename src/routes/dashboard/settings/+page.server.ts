@@ -1,5 +1,5 @@
 import { getUserIdFromCookie } from '$lib/server/auth';
-import { redirect, type Actions, error } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import prisma from '@db';
 import type { UserSettings } from '$lib/types';
@@ -69,12 +69,7 @@ export const actions: Actions = {
         const newPassword = formData.get('newPassword');
         const confirmPassword = formData.get('confirmPassword');
 
-        if (
-            newPassword === '' ||
-            confirmPassword === '' ||
-            typeof newPassword === null ||
-            typeof confirmPassword === null
-        ) {
+        if (!newPassword || !confirmPassword) {
             return {
                 passwordForm: {
                     success: false,
