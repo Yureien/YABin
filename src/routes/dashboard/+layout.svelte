@@ -18,13 +18,13 @@
             if (e.key === 'i' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
                 goto('/info');
-            }
+            }   
         });
     });
 </script>
 
 <div class="p-2 min-h-screen w-screen flex flex-col text-primary">
-    <div class="pb-4">
+    <div class="">
         <div class="flex flex-row items-center gap-4">
             <h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
 
