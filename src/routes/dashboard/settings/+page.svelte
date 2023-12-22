@@ -46,7 +46,7 @@
     <div>
         <h4 class="text-2xl mt-6 mb-4">User</h4>
         <div class="grid grid-cols-3 px-4 py-1">
-            <div >
+            <div>
                 <div class="text-xl">Name</div>
                 <div class="opacity-80">{data?.name}</div>
             </div>
@@ -57,7 +57,7 @@
             </div>
             <div>
                 <div class="text-xl">Email</div>
-                <div class="opacity-80 ">{data?.email}</div>
+                <div class="opacity-80">{data?.email}</div>
             </div>
         </div>
     </div>

@@ -18,7 +18,7 @@
             if (e.key === 'i' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault();
                 goto('/info');
-            }   
+            }
         });
     });
 </script>
