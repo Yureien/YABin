@@ -21,9 +21,7 @@ services:
     image: postgres:15-alpine
     env_file: .env
     expose:
-      - '${DB_PORT:-5432}'
-    ports:
-      - '${DB_PORT:-5432}:5432'
+      - '5432'
     environment:
       POSTGRES_USER: ${DB_USER:-yabin_user}
       POSTGRES_PASSWORD: ${DB_USER_PASS:-123}
