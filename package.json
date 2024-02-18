@@ -46,7 +46,7 @@
         "base64-js": "^1.5.1",
         "nanoid": "^5.0.1",
         "node-cron": "^3.0.2",
-        "nodemailer": "^6.9.5",
+        "nodemailer": "^6.9.9",
         "prism-themes": "^1.9.0",
         "prismjs": "^1.29.0",
         "sanitize-html": "^2.10.0"
