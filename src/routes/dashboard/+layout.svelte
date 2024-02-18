@@ -24,7 +24,7 @@
 </script>
 
 <div class="p-2 min-h-screen w-screen flex flex-col text-primary">
-    <div class="pb-4">
+    <div>
         <div class="flex flex-row items-center gap-4">
             <h1 class="mr-auto text-2xl"><a href="/">YABin</a></h1>
 
