@@ -53,7 +53,13 @@ Right now, my instance is using PostgreSQL on Vercel. However, it can be run usi
 
 ### .env Configuration
 
-`DATABASE_URL` needs to point to a running SQL database. It uses PostgreSQL by default, but can be changed to MySQL or SQLite by modifying the provider in [schema.prisma](src/lib/server/prisma/schema.prisma).
+- `DB_NAME` is the database name;
+- `DB_PROVIDER` uses 'postgres' by default, but can be changed to MySQL or SQLite.
+- `DB_HOST` database host (defaults to 'db', but can be changed to aything like localhost)
+- `DB_USER` database user
+- `DB_PORT` database port 5432
+- `DB_PASSWORD` the database user password
+- `DATABASE_URL` you don't need to modify this variable (thanks to dotenv-expand). keep it though!
 
 Remember to modify `SALT` to something secure if you plan on using user accounts.
 

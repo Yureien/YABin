@@ -1,22 +1,33 @@
 version: '3.3'
+networks:
+  yabin-network:
+    name: yabin-network
+    ipam:
+      driver: default
 services:
   yabin:
+    container_name: yabin
     ports:
-      - '3000:3000'
+      - '${PORT:-3000}:${PORT:-3000}'
     image: 'yureien/yabin:latest'
-    environment:
-      - DATABASE_URL=postgresql://user:pass@db:5432/yabin?schema=public
+    env_file: .env
     depends_on:
       - db
+    networks:
+      - yabin-network
   db:
+    container_name: yabin-db
+    restart: always
     image: postgres:15-alpine
+    env_file: .env
+    expose:
+      - '5432'
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: pass
-      POSTGRES_DB: yabin
+      POSTGRES_USER: ${DB_USER:-yabin_user}
+      POSTGRES_PASSWORD: ${DB_USER_PASS:-123}
+      POSTGRES_DB: ${DB_NAME:-yabin_db}
       POSTGRES_HOST_AUTH_METHOD: "trust"
     volumes:
-      - db_data:/var/lib/postgresql/data:Z
-    restart: always
-volumes:
-  db_data: {}
+      - ./db-data:/var/lib/postgresql/data
+    networks:
+      - yabin-network
