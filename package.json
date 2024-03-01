@@ -49,6 +49,6 @@
         "nodemailer": "^6.9.5",
         "prism-themes": "^1.9.0",
         "prismjs": "^1.29.0",
-        "sanitize-html": "^2.10.0"
+        "sanitize-html": "^2.12.1"
     }
 }
