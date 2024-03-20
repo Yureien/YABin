@@ -14,7 +14,7 @@ pycryptodome = "^3.18.0"
 requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
+black = ">=23.3,<25.0"
 
 [build-system]
 requires = ["poetry-core"]
