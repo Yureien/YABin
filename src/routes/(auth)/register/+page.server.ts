@@ -15,7 +15,7 @@ import {
 
 export const actions: Actions = {
     default: async ({ cookies, request }) => {
-        if (envPublic.PUBLIC_REGISRATION_ENABLED !== 'true') {
+        if (envPublic.PUBLIC_REGISTRATION_ENABLED !== 'true') {
             return fail(404, { success: false, errors: ['Not found'] });
         }
 

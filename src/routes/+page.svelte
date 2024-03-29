@@ -242,7 +242,7 @@
                 </button>
             </div>
 
-            {#if env.PUBLIC_REGISRATION_ENABLED == 'true'}
+            {#if env.PUBLIC_REGISTRATION_ENABLED == 'true'}
                 <div class="flex flex-row gap-4 mb-4 justify-center">
                     {#if data.loggedIn}
                         <a

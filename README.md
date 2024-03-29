@@ -63,7 +63,7 @@ Right now, my instance is using PostgreSQL on Vercel. However, it can be run usi
 
 Remember to modify `SALT` to something secure if you plan on using user accounts.
 
-You can disable or enable public registration by modifying the `PUBLIC_REGISRATION_ENABLED` variable to `true` or `false`.
+You can disable or enable public registration by modifying the `PUBLIC_REGISTRATION_ENABLED` variable to `true` or `false`.
 
 You can enable custom paste paths for everyone with the variable `PUBLIC_CUSTOM_PATHS_ENABLED`. If it is `false`, only users who are logged in can use custom paths.
 
