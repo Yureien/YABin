@@ -242,31 +242,29 @@
                 </button>
             </div>
 
-            {#if env.PUBLIC_REGISTRATION_ENABLED == 'true'}
-                <div class="flex flex-row gap-4 mb-4 justify-center">
-                    {#if data.loggedIn}
-                        <a
-                            href="/dashboard/settings"
-                            class="underline underline-offset-4 py-1"
-                            >Dashboard</a
+            <div class="flex flex-row gap-4 mb-4 justify-center">
+                {#if data.loggedIn}
+                    <a
+                        href="/dashboard/settings"
+                        class="underline underline-offset-4 py-1">Dashboard</a
+                    >
+                    <form action="/logout" method="post">
+                        <button class="underline underline-offset-4 py-1"
+                            >Logout</button
                         >
-                        <form action="/logout" method="post">
-                            <button class="underline underline-offset-4 py-1"
-                                >Logout</button
-                            >
-                        </form>
-                    {:else}
-                        <a
-                            class="underline underline-offset-4 py-1"
-                            href="/login">Login</a
-                        >
+                    </form>
+                {:else}
+                    <a class="underline underline-offset-4 py-1" href="/login"
+                        >Login</a
+                    >
+                    {#if env.PUBLIC_REGISTRATION_ENABLED == 'true'}
                         <a
                             class="underline underline-offset-4 py-1"
                             href="/register">Register</a
                         >
                     {/if}
-                </div>
-            {/if}
+                {/if}
+            </div>
 
             <Select
                 class="px-1 py-1"

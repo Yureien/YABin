@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
+    import { env } from '$env/dynamic/public';
     import type { ActionData } from './$types';
 
     export let form: ActionData;
@@ -43,13 +44,15 @@
                 />
             </div>
 
-            <div class="flex flex-row items-center gap-4 mt-2">
-                <span class="px-2 py-1">
-                    Don't have an account? <a
-                        class="underline underline-offset-4"
-                        href="/register">Register</a
-                    >.
-                </span>
+            <div class="flex flex-row items-center justify-center gap-4 mt-2">
+                {#if env.PUBLIC_REGISTRATION_ENABLED == 'true'}
+                    <span class="px-2 py-1">
+                        Don't have an account? <a
+                            class="underline underline-offset-4"
+                            href="/register">Register</a
+                        >.
+                    </span>
+                {/if}
 
                 <button class="bg-amber-500 text-black text-lg px-4 py-1"
                     >Login</button
