@@ -68,6 +68,8 @@ You can disable or enable public registration by modifying the `PUBLIC_REGISTRAT
 
 You can enable custom paste paths for everyone with the variable `PUBLIC_CUSTOM_PATHS_ENABLED`. If it is `false`, only users who are logged in can use custom paths.
 
+You can disable anonymous pastes by setting `PUBLIC_ANONYMOUS_PASTES_ENABLED` to `false`.
+
 By default, if no e-mail services are configured, all user accounts will be marked as validated. To enable e-mail validation, please configure the `MAIL_*` variables.
 
 #### Locally

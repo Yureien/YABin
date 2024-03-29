@@ -59,6 +59,18 @@ export const POST: RequestHandler = async ({ cookies, request }) => {
 
     const userId = await getUserIdFromCookie(cookies);
 
+    if (env.PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !userId) {
+        return json(
+            {
+                success: false,
+                error: 'Anonymous pastes are disabled',
+            } as PasteCreateResponse,
+            {
+                status: 403,
+            },
+        );
+    }
+
     let key: string | undefined = undefined;
     if (
         config?.customPath &&

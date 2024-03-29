@@ -14,6 +14,7 @@
     import { env } from '$env/dynamic/public';
     import type { PageData } from './$types';
     import { DHMToSeconds, secondsToDHM } from '$lib/utils/time';
+    import { PUBLIC_ANONYMOUS_PASTES_ENABLED } from '$env/static/public';
 
     export let data: PageData;
 
@@ -195,18 +196,22 @@
             spellcheck="false"
             bind:value={content}
             bind:this={inputRef}
+            disabled={env.PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' &&
+                !data.loggedIn}
         />
         <div
             class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-lg -z-10 opacity-40 hidden"
             class:hidden={content}
             bind:this={placeholderRef}
         >
-            Type or paste anything here, and then {cmdKey}+S to save.
+            {#if PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
+                Anonymous pastes are disabled on this server. <br />
+                You need to login to save pastes.
+            {:else}
+                Type or paste anything here, and then {cmdKey}+S to save.
+            {/if}
             <br /><br />
             Visit Info page to get the APIs and more.
-            <br /><br />
-            You can support this project and get a custom subdomain and custom styles
-            (and text!) by going to the Info page.
         </div>
     </div>
     <div
@@ -217,13 +222,23 @@
         <div class="flex flex-col items-center gap-4">
             <h1 class="text-4xl mb-5 max-sm:hidden"><a href="/">YABin</a></h1>
 
-            <button
-                class="bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
-                title="{cmdKey}+S"
-                on:click={save}
-            >
-                Save
-            </button>
+            {#if PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
+                <button
+                    class="bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
+                    title="{cmdKey}+S"
+                    on:click={() => goto('/login')}
+                >
+                    Login
+                </button>
+            {:else}
+                <button
+                    class="bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
+                    title="{cmdKey}+S"
+                    on:click={save}
+                >
+                    Save
+                </button>
+            {/if}
 
             <div class="flex flex-row gap-4 justify-center">
                 <button
@@ -242,29 +257,33 @@
                 </button>
             </div>
 
-            <div class="flex flex-row gap-4 mb-4 justify-center">
-                {#if data.loggedIn}
-                    <a
-                        href="/dashboard/settings"
-                        class="underline underline-offset-4 py-1">Dashboard</a
-                    >
-                    <form action="/logout" method="post">
-                        <button class="underline underline-offset-4 py-1"
-                            >Logout</button
+            {#if env.PUBLIC_ANONYMOUS_PASTES_ENABLED !== 'false' || data.loggedIn}
+                <div class="flex flex-row gap-4 mb-4 justify-center">
+                    {#if data.loggedIn}
+                        <a
+                            href="/dashboard/settings"
+                            class="underline underline-offset-4 py-1"
+                            >Dashboard</a
                         >
-                    </form>
-                {:else}
-                    <a class="underline underline-offset-4 py-1" href="/login"
-                        >Login</a
-                    >
-                    {#if env.PUBLIC_REGISTRATION_ENABLED == 'true'}
+                        <form action="/logout" method="post">
+                            <button class="underline underline-offset-4 py-1"
+                                >Logout</button
+                            >
+                        </form>
+                    {:else}
                         <a
                             class="underline underline-offset-4 py-1"
-                            href="/register">Register</a
+                            href="/login">Login</a
                         >
+                        {#if env.PUBLIC_REGISTRATION_ENABLED == 'true'}
+                            <a
+                                class="underline underline-offset-4 py-1"
+                                href="/register">Register</a
+                            >
+                        {/if}
                     {/if}
-                {/if}
-            </div>
+                </div>
+            {/if}
 
             <Select
                 class="px-1 py-1"
