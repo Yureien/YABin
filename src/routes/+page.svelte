@@ -14,7 +14,6 @@
     import { env } from '$env/dynamic/public';
     import type { PageData } from './$types';
     import { DHMToSeconds, secondsToDHM } from '$lib/utils/time';
-    import { PUBLIC_ANONYMOUS_PASTES_ENABLED } from '$env/static/public';
 
     export let data: PageData;
 
@@ -204,7 +203,7 @@
             class:hidden={content}
             bind:this={placeholderRef}
         >
-            {#if PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
+            {#if env.PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
                 Anonymous pastes are disabled on this server. <br />
                 You need to login to save pastes.
             {:else}
@@ -222,7 +221,7 @@
         <div class="flex flex-col items-center gap-4">
             <h1 class="text-4xl mb-5 max-sm:hidden"><a href="/">YABin</a></h1>
 
-            {#if PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
+            {#if env.PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
                 <button
                     class="bg-amber-500 text-black text-lg px-4 py-1 my-1 w-full max-sm:hidden"
                     title="{cmdKey}+S"
