@@ -49,12 +49,13 @@ See [cli/README.md](cli/README.md) for detailed instructions and library usage.
 
 **Requirements:** Node.js (tested on 18+, should work with 14+), and a SQL database (tested on PostgreSQL, should work with MySQL and SQLite).
 
-Right now, my instance is using PostgreSQL on Vercel. However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma)
+Right now, my instance is using PostgreSQL on Vercel.
 
 ### .env Configuration
 
+By default, it is configured to use PostgreSQL. However, it can be run using any SQL DB such as SQLite or MySQL. To use other backends, please update the provider in [schema.prisma](src/lib/server/prisma/schema.prisma).
+
 - `DB_NAME` is the database name;
-- `DB_PROVIDER` uses 'postgres' by default, but can be changed to MySQL or SQLite.
 - `DB_HOST` database host (defaults to 'db', but can be changed to aything like localhost)
 - `DB_USER` database user
 - `DB_PORT` database port 5432
