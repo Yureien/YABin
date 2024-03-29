@@ -16,7 +16,7 @@ export async function getPaste(key: string) {
         },
     });
 
-    if (!data) throw error(404, 'Not found');
+    if (!data) error(404, 'Not found');
 
     data = await prisma.paste.update({
         where: { key },
@@ -26,7 +26,7 @@ export async function getPaste(key: string) {
     const { expiresCount, readCount } = data;
     if (expiresCount !== null && expiresCount < readCount) {
         await prisma.paste.delete({ where: { key } });
-        throw error(404, 'Not found');
+        error(404, 'Not found');
     }
 
     const {

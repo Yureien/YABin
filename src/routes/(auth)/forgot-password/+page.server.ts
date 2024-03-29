@@ -6,7 +6,7 @@ import { sendResetEmail } from '$lib/server/email/reset-password';
 
 export const load: PageServerLoad = async () => {
     if (env.MAIL_ENABLED === 'false') {
-        throw redirect(303, '/');
+        redirect(303, '/');
     }
 };
 

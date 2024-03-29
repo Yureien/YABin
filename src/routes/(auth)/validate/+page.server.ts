@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ url }) => {
     const hash = url.searchParams.get('hash');
 
     if (!userId || !hash) {
-        throw error(404, 'Not found');
+        error(404, 'Not found');
     }
 
     const isValid = await validateVerificationHash(
@@ -16,8 +16,8 @@ export const load: PageServerLoad = async ({ url }) => {
     );
 
     if (!isValid) {
-        throw error(404, 'Not found');
+        error(404, 'Not found');
     }
 
-    throw redirect(303, '/login');
+    redirect(303, '/login');
 };

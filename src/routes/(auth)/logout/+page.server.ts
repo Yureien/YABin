@@ -2,13 +2,13 @@ import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-    cookies.delete('token');
-    throw redirect(303, '/');
+    /* @migration task: add path argument */ cookies.delete('token');
+    redirect(303, '/');
 };
 
 export const actions: Actions = {
     default({ cookies }) {
         cookies.delete('token');
-        throw redirect(303, '/');
+        redirect(303, '/');
     },
 };

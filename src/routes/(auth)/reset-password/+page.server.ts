@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ url }) => {
     const token = url.searchParams.get('token');
 
     if (!userId || !token) {
-        throw error(404, 'Not found');
+        error(404, 'Not found');
     }
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -20,21 +20,21 @@ export const load: PageServerLoad = async ({ url }) => {
     });
 
     if (!user || !resetToken) {
-        throw error(404, 'Not found');
+        error(404, 'Not found');
     }
 
     if (resetToken.expiresAt <= new Date()) {
-        throw error(404, 'Expired link');
+        error(404, 'Expired link');
     }
 };
 
 export const actions: Actions = {
     default: async ({ url, request }) => {
         const userId = url.searchParams.get('userId');
-        if (!userId) throw error(404, 'Not found');
+        if (!userId) error(404, 'Not found');
 
         const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user) throw error(404, 'Not found');
+        if (!user) error(404, 'Not found');
 
         const data = await request.formData();
         const newPassword = data.get('new-password');
@@ -80,7 +80,7 @@ export const actions: Actions = {
                 data: { password: newPasswordHash },
             });
             await prisma.resetToken.delete({ where: { userId: userId } });
-            throw redirect(303, '/login');
+            redirect(303, '/login');
         }
 
         return { success: false, errors: ['Unknown error'] };

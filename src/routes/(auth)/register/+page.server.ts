@@ -129,7 +129,7 @@ export const actions: Actions = {
                 sameSite: 'strict',
             });
 
-            throw redirect(303, '/');
+            redirect(303, '/');
         }
 
         return { success: false, errors: ['Unknown error'] };

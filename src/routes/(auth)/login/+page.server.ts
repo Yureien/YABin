@@ -8,7 +8,7 @@ import { getUserIdFromCookie } from '$lib/server/auth';
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userId = await getUserIdFromCookie(cookies);
-    if (userId) throw redirect(303, '/');
+    if (userId) redirect(303, '/');
 };
 export const actions: Actions = {
     default: async ({ cookies, request }) => {
@@ -78,6 +78,6 @@ export const actions: Actions = {
             sameSite: 'strict',
         });
 
-        throw redirect(303, '/');
+        redirect(303, '/');
     },
 };

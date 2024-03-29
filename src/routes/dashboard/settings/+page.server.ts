@@ -6,7 +6,7 @@ import type { UserSettings } from '$lib/types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userId = await getUserIdFromCookie(cookies);
-    if (!userId) throw redirect(303, '/login');
+    if (!userId) redirect(303, '/login');
 
     const user = await prisma.user.findUnique({
         where: { id: userId },
@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 export const actions: Actions = {
     defaults: async ({ cookies, request }) => {
         const userId = await getUserIdFromCookie(cookies);
-        if (!userId) throw redirect(303, '/login');
+        if (!userId) redirect(303, '/login');
 
         const formData = await request.formData();
         const expiresAfterSeconds = parseInt(
