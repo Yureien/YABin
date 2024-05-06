@@ -188,8 +188,8 @@
     <Hamburger bind:open={sidebarOpen} />
 </div>
 
-<div class="p-2 min-h-screen w-screen grid grid-cols-12 text-primary">
-    <div class="col-span-12 sm:col-span-10 flex flex-col relative">
+<div class="h-screen grid grid-cols-12 text-primary">
+    <div class="p-2 col-span-12 sm:col-span-8 lg:col-span-10 flex flex-col relative">
         <textarea
             class="px-2 grow border-none outline-none bg-transparent resize-none"
             spellcheck="false"
@@ -214,11 +214,11 @@
         </div>
     </div>
     <div
-        class="sm:col-span-2 md:mt-4 px-2 max-sm:fixed max-sm:bg-black max-sm:bg-opacity-50 max-sm:backdrop-blur max-sm:h-full max-sm:w-full"
+        class="sm:col-span-4 lg:col-span-2 max-sm:fixed max-sm:bg-black max-sm:bg-opacity-50 max-sm:backdrop-blur max-sm:h-full max-sm:w-full max-h-screen overflow-x-hidden overflow-y-auto"
         class:expanded={sidebarOpen}
         id="sidebar"
     >
-        <div class="flex flex-col items-center gap-4">
+        <div class="xl:py-4 px-2 md:mt-4 flex flex-col items-center gap-2 2xl:gap-4">
             <h1 class="text-4xl mb-5 max-sm:hidden"><a href="/">YABin</a></h1>
 
             {#if env.PUBLIC_ANONYMOUS_PASTES_ENABLED === 'false' && !data.loggedIn}
