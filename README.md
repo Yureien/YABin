@@ -10,6 +10,8 @@
  <a href="https://ko-fi.com/A0A21C34E"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="ko-fi" /></a>
 </p>
 
+**IMPORTANT:** I recently graduated and I'm trying to balance work and life, and find time to contribute to open source software. If you have any issues, please do shoot out an email to [contact@sohamsen.me](mailto:contact@sohamsen.me). GitHub notifications at times get buried down under tons of spam.
+
 ## Demo
 
 ![Demo Video](demo.webp)
